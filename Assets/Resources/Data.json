@@ -1,0 +1,928 @@
+{
+    "DataSet": [
+        {
+            "CategoryName": "Fit for life",
+            "Sections": [
+                {
+                    "SectionName": "Foods and nutrients",
+                    "Words": [
+                        {
+                            "word_name": "Nutrient",
+                            "word_explanation": "These are substances in food that our bodies need to grow, stay healthy, and get energy"
+                        },
+                        {
+                            "word_name": "Carbohydrate",
+                            "word_explanation": "This nutrient provides the body with energy and is found in foods like bread, pasta, and rice"
+                        },
+                        {
+                            "word_name": "Protein",
+                            "word_explanation": "This nutrient can be found in foods like meat, eggs, beans, and nuts"
+                        },
+                        {
+                            "word_name": "Fiber",
+                            "word_explanation": " This nutrient helps keep our digestive system healthy and can be found in fruits, vegetables, and whole grains"
+                        },
+                        {
+                            "word_name": "Fat",
+                            "word_explanation": "This nutrient is important for storing energy and protecting our organs"
+                        },
+                        {
+                            "word_name": "Vitamin",
+                            "word_explanation": "These are essential nutrients that our body needs in small amounts to stay healthy"
+                        },
+                        {
+                            "word_name": "Calcium",
+                            "word_explanation": "This mineral is commonly found in dairy products like milk, cheese, and yogurt"
+                        },
+                        {
+                            "word_name": "Unhealthy food",
+                            "word_explanation": "These are foods that are high in sugar, fat, or salt and offer little nutritional value"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Food groups",
+                    "Words": [
+                        {
+                            "word_name": "Protein",
+                            "word_explanation": "This food group helps build and repair muscles and tissues"
+                        },
+                        {
+                            "word_name": "Fruit",
+                            "word_explanation": "These foods are usually sweet or tart and are rich in vitamins, especially vitamin C"
+                        },
+                        {
+                            "word_name": "Vegetable",
+                            "word_explanation": "These foods are often green, leafy, or colorful and are packed with vitamins and minerals"
+                        },
+                        {
+                            "word_name": "Grain",
+                            "word_explanation": "This food group includes foods like bread, pasta, and rice"
+                        },
+                        {
+                            "word_name": "Dairy",
+                            "word_explanation": "This food group includes foods like milk, cheese, and yogurt, which provide calcium and protein"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Healthy lifestyle",
+                    "Words": [
+                        {
+                            "word_name": "Exercise",
+                            "word_explanation": "Physical activity that helps keep our bodies strong and healthy"
+                        },
+                        {
+                            "word_name": "Sleep",
+                            "word_explanation": "Resting our bodies and minds to help us stay healthy and alert"
+                        },
+                        {
+                            "word_name": "Balanced diet",
+                            "word_explanation": "This type of diet includes a variety of foods from all the different food groups in the right amounts"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CategoryName": "Materials",
+            "Sections": [
+                {
+                    "SectionName": "Natural Materials",
+                    "Words": [
+                        {
+                            "word_name": "paper",
+                            "word_explanation": "Thin material made from wood pulp used for writing or packaging"
+                        },
+                        {
+                            "word_name": "wood",
+                            "word_explanation": "Hard material from trees used for building or making items"
+                        },
+                        {
+                            "word_name": "fabric",
+                            "word_explanation": "A material made by weaving or knitting threads together, used for making clothes"
+                        },
+                        {
+                            "word_name": "metal",
+                            "word_explanation": "Solid material that is typically hard, shiny, and good at conducting heat and electricity"
+                        },
+                        {
+                            "word_name": "glass",
+                            "word_explanation": "Transparent material made by melting sand and other substances together"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Synthetic Materials",
+                    "Words": [
+                        {
+                            "word_name": "plastic",
+                            "word_explanation": "A material commonly used for making bottles and containers"
+                        },
+                        {
+                            "word_name": "rubber",
+                            "word_explanation": "Elastic material made from the sap of rubber trees or synthetic sources, used for gloves"
+                        },
+                        {
+                            "word_name": "alloy",
+                            "word_explanation": "A mixture of two or more metals"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Properties of Materials",
+                    "Words": [
+                        {
+                            "word_name": "elastic",
+                            "word_explanation": "Able to return to its original shape after being stretched or compressed"
+                        },
+                        {
+                            "word_name": "flexible",
+                            "word_explanation": "Able to bend without breaking"
+                        },
+                        {
+                            "word_name": "transparent",
+                            "word_explanation": "Allowing light to pass through"
+                        },
+                        {
+                            "word_name": "waterproof",
+                            "word_explanation": "Resistant to water, not allowing water to pass through"
+                        },
+                        {
+                            "word_name": "absorbent",
+                            "word_explanation": "able to take liquid in through the surface and to hold it"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CategoryName": "Matter and Changes",
+            "Sections": [
+                {
+                    "SectionName": "State of matter",
+                    "Words": [
+                        {
+                            "word_name": "Matter",
+                            "word_explanation": "- Anything that has mass and occupies space"
+                        },
+                        {
+                            "word_name": "Mass",
+                            "word_explanation": "- The amount of matter in an object"
+                        },
+                        {
+                            "word_name": "Volume",
+                            "word_explanation": "- The amount of space occupied by an object"
+                        },
+                        {
+                            "word_name": "Solid, liquid, gas",
+                            "word_explanation": "- Three states of matter"
+                        },
+                        {
+                            "word_name": "Solid",
+                            "word_explanation": "- A state of matter that has a definite shape"
+                        },
+                        {
+                            "word_name": "Gas",
+                            "word_explanation": "- A state of matter that has no definite volume"
+                        },
+                        {
+                            "word_name": "Liquid",
+                            "word_explanation": "- A state of matter that a definite volume and can flow"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Matter changes",
+                    "Words": [
+                        {
+                            "word_name": "Condensation",
+                            "word_explanation": "- The process in which a gas changes into a liquid"
+                        },
+                        {
+                            "word_name": "Boiling",
+                            "word_explanation": "- The process of heating a liquid until it changes into a gas at boiling point"
+                        },
+                        {
+                            "word_name": "Evaporation",
+                            "word_explanation": "- The process in which a liquid changes into a gas"
+                        },
+                        {
+                            "word_name": "Freezing",
+                            "word_explanation": "- The process of changing a liquid into a solid"
+                        },
+                        {
+                            "word_name": "Melting",
+                            "word_explanation": "- The process of changing a solid into a liquid"
+                        },
+                        {
+                            "word_name": "Water cycle",
+                            "word_explanation": "- The continuous movement of water from the Earth's surface up to the sky and back down the Earth again"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CategoryName": "Sound",
+            "Sections": [
+                {
+                    "SectionName": "Basic of sound",
+                    "Words": [
+                        {
+                            "word_name": "Sound",
+                            "word_explanation": "- What we hear when something makes a noise?"
+                        },
+                        {
+                            "word_name": "Sound source",
+                            "word_explanation": "- Where does sound come from?"
+                        },
+                        {
+                            "word_name": "Vibrate",
+                            "word_explanation": "- How can sound soures produce sound?"
+                        },
+                        {
+                            "word_name": "Vibration",
+                            "word_explanation": "- This movement poduces sound"
+                        },
+                        {
+                            "word_name": "Travel",
+                            "word_explanation": "- The way sound move from one place to another"
+                        },
+                        {
+                            "word_name": "Record",
+                            "word_explanation": "- To capture sounds or voices so they can be played back later"
+                        },
+                        {
+                            "word_name": "Record",
+                            "word_explanation": "- The captured sound or voice"
+                        },
+                        {
+                            "word_name": "Replay",
+                            "word_explanation": "- To play a recorded sound or video again"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Impact of sound",
+                    "Words": [
+                        {
+                            "word_name": "Noise",
+                            "word_explanation": "- A sound, especially one that is loud or unpleasant"
+                        },
+                        {
+                            "word_name": "Noise pollution",
+                            "word_explanation": "- This occures when sounds get too loud or last too long"
+                        },
+                        {
+                            "word_name": "Soundproof",
+                            "word_explanation": "- To prevent sound from coming into a room or building"
+                        },
+                        {
+                            "word_name": "Decibel",
+                            "word_explanation": "- A unit that measures the loudness of sound"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CategoryName": "Light and Shadow",
+            "Sections": [
+                {
+                    "SectionName": "Light",
+                    "Words": [
+                        {
+                            "word_name": "Light",
+                            "word_explanation": "- What makes things visible and helps us see?"
+                        },
+                        {
+                            "word_name": "Light source",
+                            "word_explanation": "- Where does light come from?"
+                        },
+                        {
+                            "word_name": "Reflection",
+                            "word_explanation": "- The process of light bouncing back from a surface"
+                        },
+                        {
+                            "word_name": "Absorption",
+                            "word_explanation": "- When light is taken in by a material and not reflected"
+                        },
+                        {
+                            "word_name": "Absorb",
+                            "word_explanation": "- The action of taking in light"
+                        },
+                        {
+                            "word_name": "Transmission",
+                            "word_explanation": "- When light passes through a material"
+                        },
+                        {
+                            "word_name": "Transmit",
+                            "word_explanation": "- The action of light passing through something"
+                        },
+                        {
+                            "word_name": "Travel",
+                            "word_explanation": "- What light does as it moves from one place to another"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "What materials let light go through?",
+                    "Words": [
+                        {
+                            "word_name": "Opaque.",
+                            "word_explanation": "- A material that does not let any light pass through"
+                        },
+                        {
+                            "word_name": "Transparent.",
+                            "word_explanation": "- A material that allows light to pass through completely"
+                        },
+                        {
+                            "word_name": "Translucent.",
+                            "word_explanation": "- A material that lets some light through but not all"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Shadow",
+                    "Words": [
+                        {
+                            "word_name": "Shadow",
+                            "word_explanation": "- The dark area created when an object blocks light"
+                        },
+                        {
+                            "word_name": "Block",
+                            "word_explanation": "- What happens when an object stops light from passing through"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CategoryName": "Plants",
+            "Sections": [
+                {
+                    "SectionName": "Parts of a plant:",
+                    "Words": [
+                        {
+                            "word_name": "Root",
+                            "word_explanation": "- The part of the plant that grows underground and absorbs water and nutrients"
+                        },
+                        {
+                            "word_name": "Stem",
+                            "word_explanation": "- The part of the plant that supports leaves, transports water and nutrients"
+                        },
+                        {
+                            "word_name": "Leaf",
+                            "word_explanation": "- The part of the plant that use sunlight and chlorophyll to convert carbon dioxide and water into sugar"
+                        },
+                        {
+                            "word_name": "Flowers",
+                            "word_explanation": "- The part of the plant that produces fruits and seeds"
+                        },
+                        {
+                            "word_name": "Fruit",
+                            "word_explanation": "- The part of the plant that protect seeds and helps with seed dispersal"
+                        },
+                        {
+                            "word_name": "Seed",
+                            "word_explanation": "- The part of the plant that produces new plant"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Plant growth and function:",
+                    "Words": [
+                        {
+                            "word_name": "Grow.",
+                            "word_explanation": "- What plants do when they increase in size"
+                        },
+                        {
+                            "word_name": "Transport.",
+                            "word_explanation": "- The process of moving water and nutrients through the plant"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Plant needs",
+                    "Words": [
+                        {
+                            "word_name": "Sunlight",
+                            "word_explanation": "- What plants need from the sun to make food"
+                        },
+                        {
+                            "word_name": "Water",
+                            "word_explanation": "- Plants use ... and carbon dioxide to make fruit"
+                        },
+                        {
+                            "word_name": "Air",
+                            "word_explanation": "- What plants need from the atmosphere to live"
+                        },
+                        {
+                            "word_name": "Minerals",
+                            "word_explanation": "- Nutrients absorbed by roots from the soil"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Photosynthesis and Respiration",
+                    "Words": [
+                        {
+                            "word_name": "Photosynthesis",
+                            "word_explanation": "- The process plants use to make food"
+                        },
+                        {
+                            "word_name": "Photosynthesis",
+                            "word_explanation": "- The process plants use energy from sunlight to turn water and carbon dioxide into sugar and release oxygen into the air"
+                        },
+                        {
+                            "word_name": "Respiration",
+                            "word_explanation": "- The process by which plants convert sugar and oxygen into energy"
+                        },
+                        {
+                            "word_name": "Photosynthesis",
+                            "word_explanation": "- The process of plants occurs in the presence of light (day time)"
+                        },
+                        {
+                            "word_name": "Respiration",
+                            "word_explanation": "- The process of plants occurs everytime (day time and night time)"
+                        },
+                        {
+                            "word_name": "Carbon dioxide",
+                            "word_explanation": "- The gas plants take in from the air during photosynthesis"
+                        },
+                        {
+                            "word_name": "Sugar",
+                            "word_explanation": "- The substance plants produce during photosynthesis"
+                        },
+                        {
+                            "word_name": "Oxygen",
+                            "word_explanation": "- The gas released by plants during photosynthesis"
+                        },
+                        {
+                            "word_name": "Chlorophyll",
+                            "word_explanation": "- What do leaves contain that allows plants to carry out photosynthesis?"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Reproduction",
+                    "Words": [
+                        {
+                            "word_name": "Reproduction",
+                            "word_explanation": "- The process by which plants make more of themselves"
+                        },
+                        {
+                            "word_name": "Pollination",
+                            "word_explanation": "- The process when the stigma receives pollen grains from the anther"
+                        },
+                        {
+                            "word_name": "Pollinator.",
+                            "word_explanation": "- The animal that helps move pollen from one flower to another"
+                        },
+                        {
+                            "word_name": "Fertilization",
+                            "word_explanation": "- The process when the pollen and ovules join inside the ovary"
+                        },
+                        {
+                            "word_name": "Dispersal",
+                            "word_explanation": "- The process of spreading seeds away from the parent plant"
+                        },
+                        {
+                            "word_name": "Ovary",
+                            "word_explanation": "- What part of plants develops into fruit?"
+                        },
+                        {
+                            "word_name": "Ovule",
+                            "word_explanation": "- What part of plants develops into seed?"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CategoryName": "Animals and food chains",
+            "Sections": [
+                {
+                    "SectionName": "Animals",
+                    "Words": [
+                        {
+                            "word_name": "Carnivore",
+                            "word_explanation": "- This animal often hunts other animals for food"
+                        },
+                        {
+                            "word_name": "Herbivore",
+                            "word_explanation": "- This animal has flat teeth designed for grinding leaves and stems"
+                        },
+                        {
+                            "word_name": "Omnivore",
+                            "word_explanation": "- This animal has a diverse diet that can include fruits, vegetables, and meat"
+                        },
+                        {
+                            "word_name": "Verterbrate",
+                            "word_explanation": "- This animal group includes species such as mammals, birds, reptiles, amphibians, and fish"
+                        },
+                        {
+                            "word_name": "Inverterbrate",
+                            "word_explanation": "- This group includes animals like insects, spiders, and mollusks"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Food chains",
+                    "Words": [
+                        {
+                            "word_name": "Food chain",
+                            "word_explanation": "- It usually starts with a plant and ends with a top predator"
+                        },
+                        {
+                            "word_name": "Food producer",
+                            "word_explanation": "- These are often green plants that make their own food using sunlight"
+                        },
+                        {
+                            "word_name": "Food consumer",
+                            "word_explanation": "- They can be herbivores, carnivores, or omnivores"
+                        },
+                        {
+                            "word_name": "Food web",
+                            "word_explanation": "- This is more complex than a food chain and shows how different food chains are connected"
+                        },
+                        {
+                            "word_name": "Organism",
+                            "word_explanation": "- This term includes anything that is alive, like plants, animals, bacteria, and fungi"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CategoryName": "Environment and natural resources",
+            "Sections": [
+                {
+                    "SectionName": "Natural resources",
+                    "Words": [
+                        {
+                            "word_name": "Natural resources",
+                            "word_explanation": "- Anything that is supplied by nature and can be used by the living beings"
+                        },
+                        {
+                            "word_name": "Renewable resource",
+                            "word_explanation": "- A type of resource that has unlimited supply"
+                        },
+                        {
+                            "word_name": "Renewable resource",
+                            "word_explanation": "- Air, water and sunlight are grouped into this type of natural resources"
+                        },
+                        {
+                            "word_name": "Non-renewable resource",
+                            "word_explanation": "- A type of resource that has limited supply"
+                        },
+                        {
+                            "word_name": "Non-renewable resource",
+                            "word_explanation": "- Coal, petroleum, and natural gas are grouped into this type of natural resources"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Energy from natural resources",
+                    "Words": [
+                        {
+                            "word_name": "Fossil fuel",
+                            "word_explanation": "- Energy sources like coal, oil, and natural gas formed from ancient plant and animal remains"
+                        },
+                        {
+                            "word_name": "Hydropower energy",
+                            "word_explanation": "- Energy generated from moving water"
+                        },
+                        {
+                            "word_name": "Biomass energy",
+                            "word_explanation": "- Energy produced from organic materials like plants and animal waste"
+                        },
+                        {
+                            "word_name": "Geothermal energy",
+                            "word_explanation": "- Energy derived from the heat stored within the Earth"
+                        },
+                        {
+                            "word_name": "Nuclear energy",
+                            "word_explanation": "- Energy released from atomic reactions"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CategoryName": "The solar system",
+            "Sections": [
+                {
+                    "SectionName": "Celestial Bodies",
+                    "Words": [
+                        {
+                            "word_name": "Planet",
+                            "word_explanation": "- A large round object in space that travels around a star, like Earth"
+                        },
+                        {
+                            "word_name": "Statellite",
+                            "word_explanation": "- An object that orbits a planet; can be natural (like a moon) or man-made"
+                        },
+                        {
+                            "word_name": "Sun",
+                            "word_explanation": "- The star at the center of our solar system that gives us light and heat"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Orbital Mechanics",
+                    "Words": [
+                        {
+                            "word_name": "Orbit",
+                            "word_explanation": "- The path an object takes as it goes around a star or planet"
+                        },
+                        {
+                            "word_name": "Orbit",
+                            "word_explanation": "- To travel around a star or planet in a curved path"
+                        },
+                        {
+                            "word_name": "Axis",
+                            "word_explanation": "- An imaginary line through the middle of a planet that it spins around"
+                        },
+                        {
+                            "word_name": "Tilt",
+                            "word_explanation": "- The angle at which a planet's axis is tilted compared to its orbit"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Movements and Positions",
+                    "Words": [
+                        {
+                            "word_name": "Hemisphere",
+                            "word_explanation": "- Half of a sphere, often referring to half of Earth"
+                        },
+                        {
+                            "word_name": "Rotate",
+                            "word_explanation": "- To spin around on an axis"
+                        },
+                        {
+                            "word_name": "Rotation",
+                            "word_explanation": "- The act of spinning around an axis"
+                        },
+                        {
+                            "word_name": "Revolution",
+                            "word_explanation": "- The act of traveling in a path around another object"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Planets of the Solar System",
+                    "Words": [
+                        {
+                            "word_name": "Mercury",
+                            "word_explanation": "- The smallest planet and closest to the Sun"
+                        },
+                        {
+                            "word_name": "Venus",
+                            "word_explanation": "- The second planet from the Sun, known for its thick, cloudy atmosphere"
+                        },
+                        {
+                            "word_name": "Earth",
+                            "word_explanation": "- The third planet from the Sun, where we live"
+                        },
+                        {
+                            "word_name": "Mars",
+                            "word_explanation": "- The fourth planet from the Sun, known as the Red Planet"
+                        },
+                        {
+                            "word_name": "Jupiter",
+                            "word_explanation": "- The largest planet in our solar system, fifth from the Sun"
+                        },
+                        {
+                            "word_name": "Saturn",
+                            "word_explanation": "- The sixth planet from the Sun, famous for its rings"
+                        },
+                        {
+                            "word_name": "Uranus",
+                            "word_explanation": "- The seventh planet from the Sun, rotates on its side"
+                        },
+                        {
+                            "word_name": "Neptune",
+                            "word_explanation": "- The eighth planet from the Sun, known for its deep blue color"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CategoryName": "Organ systems of human body",
+            "Sections": [
+                {
+                    "SectionName": "Digestive system",
+                    "Words": [
+                        {
+                            "word_name": "Digestive system",
+                            "word_explanation": "- The body system that helps us digest food"
+                        },
+                        {
+                            "word_name": "Esophagus",
+                            "word_explanation": "- The tube that connects the mouth to the stomach"
+                        },
+                        {
+                            "word_name": "Small intestine",
+                            "word_explanation": "- This organ absorbs the nutrients into the blood"
+                        },
+                        {
+                            "word_name": "Large intestine",
+                            "word_explanation": "- Where indigestible food and water are processed, stored and dispersed?"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Nervous system",
+                    "Words": [
+                        {
+                            "word_name": "Nervous system",
+                            "word_explanation": "- The system that controls the body"
+                        },
+                        {
+                            "word_name": "Nerve",
+                            "word_explanation": "- A fiber that sends messages between the brain and the body"
+                        },
+                        {
+                            "word_name": "Spinal cord",
+                            "word_explanation": "- The bundle of nerves inside the spine"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Urinary system",
+                    "Words": [
+                        {
+                            "word_name": "Urinary system",
+                            "word_explanation": "- The system that removes waste from the blood and makes urine"
+                        },
+                        {
+                            "word_name": "Kidney",
+                            "word_explanation": "- The organ that filters wastes from the blood and produce urine to get rid of it"
+                        },
+                        {
+                            "word_name": "Bladder",
+                            "word_explanation": "- The organ that stores urine before it leaves the body"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Respiratory System",
+                    "Words": [
+                        {
+                            "word_name": "Respiratory system",
+                            "word_explanation": "- The system that helps us breathe"
+                        },
+                        {
+                            "word_name": "Windpipe",
+                            "word_explanation": "- The tube that carries air to the lungs"
+                        },
+                        {
+                            "word_name": "Oxygen",
+                            "word_explanation": "- The gas we breathe in that our body needs"
+                        },
+                        {
+                            "word_name": "Carbon dioxide",
+                            "word_explanation": "- The gas we breathe out as waste"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Circulatory System",
+                    "Words": [
+                        {
+                            "word_name": "Circulatory system",
+                            "word_explanation": "- The system that carries blood through the body"
+                        },
+                        {
+                            "word_name": "Blood vessel",
+                            "word_explanation": "- Tubes that carry blood through the body"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Skeletal System",
+                    "Words": [
+                        {
+                            "word_name": "Skeletal system",
+                            "word_explanation": "- The system of bones that supports the body"
+                        },
+                        {
+                            "word_name": "Backbone",
+                            "word_explanation": "- The bone holds your body upright and also protects the spinal cord"
+                        },
+                        {
+                            "word_name": "Rib",
+                            "word_explanation": "- The bones that protect the chest organs"
+                        },
+                        {
+                            "word_name": "Joint",
+                            "word_explanation": "- Where two bones meet"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Muscular system",
+                    "Words": [
+                        {
+                            "word_name": "Muscular system",
+                            "word_explanation": "- The system of muscles that helps the body move"
+                        },
+                        {
+                            "word_name": "Muscle",
+                            "word_explanation": "- The ... are attached to bones and move the bones"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CategoryName": "Diease",
+            "Sections": [
+                {
+                    "SectionName": "General Health and Disease",
+                    "Words": [
+                        {
+                            "word_name": "Disease",
+                            "word_explanation": "- An illness that affects the body or mind"
+                        },
+                        {
+                            "word_name": "Transmission",
+                            "word_explanation": "- How a disease spreads from one person to another"
+                        },
+                        {
+                            "word_name": "Germ",
+                            "word_explanation": "- Tiny organisms that can cause disease"
+                        },
+                        {
+                            "word_name": "Prevention",
+                            "word_explanation": "- Actions taken to stop disease from spreading"
+                        },
+                        {
+                            "word_name": "Parasite",
+                            "word_explanation": "- An organism that lives on or in another organism and causes harm"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Specific Diseases",
+                    "Words": [
+                        {
+                            "word_name": "Malaria",
+                            "word_explanation": "- A disease caused by parasites, spread by mosquito bites"
+                        },
+                        {
+                            "word_name": "Dengue",
+                            "word_explanation": "- A disease caused by a virus, also spread by mosquitoes"
+                        },
+                        {
+                            "word_name": "Encephalitis",
+                            "word_explanation": "- Inflammation of the brain, can be caused by viruses"
+                        },
+                        {
+                            "word_name": "Hepatitis a",
+                            "word_explanation": "- A disease that affects the liver, usually spread through contaminated food or water"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Microorganisms and Vaccination",
+                    "Words": [
+                        {
+                            "word_name": "Bacteria",
+                            "word_explanation": "- Single-celled organisms, some of which can cause diseases"
+                        },
+                        {
+                            "word_name": "Vaccinate",
+                            "word_explanation": "- To give a shot to protect against a disease"
+                        }
+                    ]
+                },
+                {
+                    "SectionName": "Methods of Transmission and Infection",
+                    "Words": [
+                        {
+                            "word_name": "Alcohol",
+                            "word_explanation": "- A drink that should avoid to prevent hepatitis A"
+                        },
+                        {
+                            "word_name": "Body fluid",
+                            "word_explanation": "- Liquids from the body that can spread diseases (e.g., blood, saliva)"
+                        },
+                        {
+                            "word_name": "Infect",
+                            "word_explanation": "- To make someone else sick"
+                        },
+                        {
+                            "word_name": "Syringe",
+                            "word_explanation": "- A tool used to inject medicine or vaccines into the body"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

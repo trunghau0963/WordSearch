@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eac3137314b9b845a3d6d44daadc029, type: 3}
+  m_Name: Game Category Data
+  m_EditorClassIdentifier: 
+  categoryRecords:
+  - selectedCategoryName: Life Sciences
+    sectionDatas: {fileID: 11400000, guid: 92e579c9c2e716743ace3316dbc4d13b, type: 2}
+  - selectedCategoryName: Physical Sciences
+    sectionDatas: {fileID: 11400000, guid: 84afc0861e21ff2469cdcb0ea654524b, type: 2}
+  - selectedCategoryName: Earth and Space Sciences
+    sectionDatas: {fileID: 11400000, guid: e40295d509eafef41abe0050eeddcfd2, type: 2}

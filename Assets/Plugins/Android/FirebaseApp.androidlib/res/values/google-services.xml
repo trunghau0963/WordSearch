@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/firebase_database_url,@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id,@string/default_android_client_id,@string/default_web_client_id">
+  <string name="firebase_database_url" translatable="false">https://wordsearchevoluation-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+  <string name="gcm_defaultSenderId" translatable="false">1000133012177</string>
+  <string name="google_storage_bucket" translatable="false">wordsearchevoluation.appspot.com</string>
+  <string name="project_id" translatable="false">wordsearchevoluation</string>
+  <string name="google_api_key" translatable="false">AIzaSyCDyivhdtLLkpCzPJjzT1LC5gkPooG9M08</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCDyivhdtLLkpCzPJjzT1LC5gkPooG9M08</string>
+  <string name="google_app_id" translatable="false">1:1000133012177:android:0d5347bf4f9b81ca25b3f0</string>
+  <string name="default_android_client_id" translatable="false">1000133012177-1fvcaifsg7kuklopeokq3a3qas9epi1d.apps.googleusercontent.com</string>
+  <string name="default_web_client_id" translatable="false">1000133012177-57kol01kehd0bojl1esk2njr6vqvh7f9.apps.googleusercontent.com</string>
+</resources>

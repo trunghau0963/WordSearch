@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "1000133012177",
+    "firebase_url": "https://wordsearchevoluation-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "wordsearchevoluation",
+    "storage_bucket": "wordsearchevoluation.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1000133012177:android:0d5347bf4f9b81ca25b3f0",
+        "android_client_info": {
+          "package_name": "com.Selab.WordSearchRevoluation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1000133012177-1fvcaifsg7kuklopeokq3a3qas9epi1d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.Selab.WordSearchRevoluation",
+            "certificate_hash": "9174be3e1ec15cf9675ef88c8b668c24f2f8b746"
+          }
+        },
+        {
+          "client_id": "1000133012177-susr4barhr9om49pbtfd6spug6enkjcg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.Selab.WordSearchRevoluation",
+            "certificate_hash": "1834bdae255165e12488ac191c62148992433ad2"
+          }
+        },
+        {
+          "client_id": "1000133012177-57kol01kehd0bojl1esk2njr6vqvh7f9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDyivhdtLLkpCzPJjzT1LC5gkPooG9M08"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1000133012177-57kol01kehd0bojl1esk2njr6vqvh7f9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

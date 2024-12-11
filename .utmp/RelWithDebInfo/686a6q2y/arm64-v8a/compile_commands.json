@@ -1,0 +1,7 @@
+[
+{
+  "directory": "E:/WordSearch2D-d126c320cfd92f927e0c1419de3eb6c69dcd9827/WordSearch2D/.utmp/RelWithDebInfo/686a6q2y/arm64-v8a",
+  "command": "C:\\PROGRA~1\\UNITYH~1\\60000~1.29F\\Editor\\Data\\PLAYBA~1\\ANDROI~1\\NDK\\TOOLCH~1\\llvm\\prebuilt\\WINDOW~1\\bin\\CLANG_~1.EXE --target=aarch64-none-linux-android23 --sysroot=\"C:/Program Files/Unity Hub/6000.0.29f1/Editor/Data/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/windows-x86_64/sysroot\" -DEXTERNAL_FRAME_PACING_CODE -Dswappywrapper_EXPORTS -IE:/WordSearch2D-d126c320cfd92f927e0c1419de3eb6c69dcd9827/WordSearch2D/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/FramePacing -isystem C:/Users/nttha/.gradle/caches/transforms-3/268849a49ea9eb2bba6f4e0ac95bfd63/transformed/jetified-games-frame-pacing-1.10.0/prefab/modules/swappy_static/include -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fexceptions -frtti -stdlib=libc++ -Wall -Wextra -pedantic -Werror -O2 -g -DNDEBUG -fPIC -o FramePacing\\CMakeFiles\\swappywrapper.dir\\UnitySwappyWrapper.cpp.o -c E:\\WordSearch2D-d126c320cfd92f927e0c1419de3eb6c69dcd9827\\WordSearch2D\\Library\\Bee\\Android\\Prj\\IL2CPP\\Gradle\\unityLibrary\\src\\main\\cpp\\FramePacing\\UnitySwappyWrapper.cpp",
+  "file": "E:\\WordSearch2D-d126c320cfd92f927e0c1419de3eb6c69dcd9827\\WordSearch2D\\Library\\Bee\\Android\\Prj\\IL2CPP\\Gradle\\unityLibrary\\src\\main\\cpp\\FramePacing\\UnitySwappyWrapper.cpp"
+}
+]

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17bbb828738398e40bc467ded7ac03af, type: 3}
+  m_Name: CurrentGameData
+  m_EditorClassIdentifier: 
+  selectedBoardData: {fileID: 11400000, guid: 78e47b8f56343f24a8c9adb75ad304e4, type: 2}
+  selectedCategory: {fileID: 11400000, guid: 2114e4393b3027949b1415f9a16f90ca, type: 2}
+  selectedSection: {fileID: 11400000, guid: 34894f15c92a24344bbcd1fa3d42d2f6, type: 2}
+  selectedLevel: {fileID: 0}
