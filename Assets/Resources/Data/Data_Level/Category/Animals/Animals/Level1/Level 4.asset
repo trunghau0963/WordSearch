@@ -1,0 +1,122 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da74a62883085944be0cef5f79531b7, type: 3}
+  m_Name: Level 4
+  m_EditorClassIdentifier: 
+  Name: Board4
+  isCompleted: 0
+  index: 0
+  timeInSeconds: 60
+  Columns: 8
+  Rows: 8
+  Boards:
+  - Size: 8
+    Row:
+    - A
+    - I
+    - P
+    - H
+    - Q
+    - D
+    - C
+    - D
+  - Size: 8
+    Row:
+    - Y
+    - R
+    - R
+    - Y
+    - C
+    - C
+    - E
+    - J
+  - Size: 8
+    Row:
+    - Q
+    - F
+    - O
+    - R
+    - A
+    - D
+    - P
+    - D
+  - Size: 8
+    Row:
+    - L
+    - S
+    - T
+    - O
+    - L
+    - A
+    - M
+    - G
+  - Size: 8
+    Row:
+    - E
+    - X
+    - E
+    - R
+    - C
+    - I
+    - S
+    - E
+  - Size: 8
+    Row:
+    - N
+    - C
+    - I
+    - I
+    - I
+    - R
+    - M
+    - E
+  - Size: 8
+    Row:
+    - M
+    - C
+    - N
+    - L
+    - U
+    - Y
+    - O
+    - P
+  - Size: 8
+    Row:
+    - K
+    - X
+    - S
+    - Y
+    - M
+    - M
+    - G
+    - V
+  SearchWords:
+  - Word: DAIRY
+    Row: 0
+    Column: 0
+    Direction: 0
+    timeInSeconds: 0
+  - Word: PROTEIN
+    Row: 0
+    Column: 0
+    Direction: 0
+    timeInSeconds: 0
+  - Word: CALCIUM
+    Row: 0
+    Column: 0
+    Direction: 0
+    timeInSeconds: 0
+  - Word: EXERCISE
+    Row: 0
+    Column: 0
+    Direction: 0
+    timeInSeconds: 0

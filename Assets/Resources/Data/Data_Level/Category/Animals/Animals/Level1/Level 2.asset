@@ -1,0 +1,107 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da74a62883085944be0cef5f79531b7, type: 3}
+  m_Name: Level 2
+  m_EditorClassIdentifier: 
+  Name: Board2
+  isCompleted: 0
+  index: 0
+  timeInSeconds: 60
+  Columns: 7
+  Rows: 8
+  Boards:
+  - Size: 8
+    Row:
+    - L
+    - Y
+    - C
+    - C
+    - O
+    - X
+    - C
+    - O
+  - Size: 8
+    Row:
+    - S
+    - O
+    - E
+    - A
+    - X
+    - K
+    - U
+    - Y
+  - Size: 8
+    Row:
+    - R
+    - K
+    - P
+    - L
+    - X
+    - Q
+    - N
+    - E
+  - Size: 8
+    Row:
+    - E
+    - S
+    - I
+    - C
+    - R
+    - E
+    - X
+    - E
+  - Size: 8
+    Row:
+    - G
+    - G
+    - F
+    - I
+    - B
+    - E
+    - R
+    - R
+  - Size: 8
+    Row:
+    - V
+    - U
+    - I
+    - U
+    - L
+    - D
+    - O
+    - D
+  - Size: 8
+    Row:
+    - J
+    - H
+    - W
+    - M
+    - M
+    - F
+    - P
+    - C
+  SearchWords:
+  - Word: FIBER
+    Row: 0
+    Column: 0
+    Direction: 0
+    timeInSeconds: 0
+  - Word: EXERCISE
+    Row: 0
+    Column: 0
+    Direction: 0
+    timeInSeconds: 0
+  - Word: CALCIUM
+    Row: 0
+    Column: 0
+    Direction: 0
+    timeInSeconds: 0

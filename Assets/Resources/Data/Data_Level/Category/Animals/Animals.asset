@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e0e4eed9c249e4489e8096d2d5437d7, type: 3}
+  m_Name: Animals
+  m_EditorClassIdentifier: 
+  SectionName: Animals
+  isCompleted: 0
+  isLock: 0
+  levels:
+  - {fileID: 11400000, guid: 97119c8cfb52e4d429394ed1fcd22714, type: 2}
+  - {fileID: 11400000, guid: 3bbd152378883a4418ca0061435476e2, type: 2}
+  - {fileID: 11400000, guid: 747693b503d025d43b8749ef45788294, type: 2}
+  - {fileID: 11400000, guid: 8ad2ed1fcc6e57449969f3cedeb2005f, type: 2}
+  - {fileID: 11400000, guid: ac54b49d50049ae4aaa1610a29be01c0, type: 2}
+  - {fileID: 11400000, guid: ff75c057f21abb5429d5d5119df330aa, type: 2}
+  - {fileID: 11400000, guid: 08005e1772814a241865307a2c6010bf, type: 2}
+  - {fileID: 11400000, guid: f8068afd7e4664b4886d270e2db0c664, type: 2}
+  - {fileID: 11400000, guid: 27433afc97d389f4f912ef8842fc4f2c, type: 2}
+  - {fileID: 11400000, guid: 37c82320e36a4794a979cd5de4c112f7, type: 2}
