@@ -1,5 +1,0 @@
-E:/WordSearch2D/.utmp/RelWithDebInfo/1at35194/armeabi-v7a/CMakeFiles/edit_cache.dir
-E:/WordSearch2D/.utmp/RelWithDebInfo/1at35194/armeabi-v7a/CMakeFiles/rebuild_cache.dir
-E:/WordSearch2D/.utmp/RelWithDebInfo/1at35194/armeabi-v7a/FramePacing/CMakeFiles/swappywrapper.dir
-E:/WordSearch2D/.utmp/RelWithDebInfo/1at35194/armeabi-v7a/FramePacing/CMakeFiles/edit_cache.dir
-E:/WordSearch2D/.utmp/RelWithDebInfo/1at35194/armeabi-v7a/FramePacing/CMakeFiles/rebuild_cache.dir
