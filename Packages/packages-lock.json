@@ -1,5 +1,14 @@
 {
   "dependencies": {
+    "com.boxqkrtm.ide.cursor": {
+      "version": "https://github.com/boxqkrtm/com.unity.ide.cursor.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.test-framework": "1.1.9"
+      },
+      "hash": "0a98b387a92cf9f1f47012fc46d4cf33576e5916"
+    },
     "com.qonversion.unity": {
       "version": "https://github.com/qonversion/unity-sdk.git#7.0.0",
       "depth": 0,
@@ -21,7 +30,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.2d.aseprite": {
-      "version": "1.1.6",
+      "version": "1.1.8",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -100,7 +109,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.adaptiveperformance": {
-      "version": "5.1.0",
+      "version": "5.1.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -136,7 +145,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.burst": {
-      "version": "1.8.18",
+      "version": "1.8.19",
       "depth": 3,
       "source": "registry",
       "dependencies": {
@@ -146,7 +155,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
-      "version": "2.5.2",
+      "version": "2.6.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -183,7 +192,7 @@
         "com.unity.2d.spriteshape": "10.0.7",
         "com.unity.2d.tilemap": "1.0.0",
         "com.unity.2d.tilemap.extras": "4.1.0",
-        "com.unity.2d.aseprite": "1.1.6"
+        "com.unity.2d.aseprite": "1.1.8"
       }
     },
     "com.unity.feature.mobile": {
@@ -191,8 +200,8 @@
       "depth": 0,
       "source": "builtin",
       "dependencies": {
-        "com.unity.mobile.android-logcat": "1.4.3",
-        "com.unity.adaptiveperformance": "5.1.0",
+        "com.unity.mobile.android-logcat": "1.4.4",
+        "com.unity.adaptiveperformance": "5.1.1",
         "com.unity.mobile.notifications": "2.4.0"
       }
     },
@@ -215,7 +224,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.11.2",
+      "version": "1.12.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -231,7 +240,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.mobile.android-logcat": {
-      "version": "1.4.3",
+      "version": "1.4.4",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
