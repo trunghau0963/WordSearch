@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour
 {
-    private Board board;
+    private BoardCandy board;
     public Text scoreText;
     public int score;
     public Image scoreBar;
     // Start is called before the first frame update
     void Start()
     {
-        board = FindFirstObjectByType<Board>();
+        board = FindFirstObjectByType<BoardCandy>();
     }
 
     // Update is called once per frame

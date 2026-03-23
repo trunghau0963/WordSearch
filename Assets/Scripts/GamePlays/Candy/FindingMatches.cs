@@ -6,12 +6,12 @@ using UnityEngine;
 
 public class FindingMatches : MonoBehaviour
 {
-    public Board board;
+    public BoardCandy board;
     public List<GameObject> currentMatches = new();
 
     void Start()
     {
-        board = FindFirstObjectByType<Board>();
+        board = FindFirstObjectByType<BoardCandy>();
     }
 
     public void FindAllMatches()

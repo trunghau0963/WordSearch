@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class HintManager : MonoBehaviour
 {
-    private Board board;
+    private BoardCandy board;
     public float hintDelay;
     private float hintDelaySeconds;
     public GameObject hintParticle;
     public GameObject currentHint;  
     void Start()
     {
-        board = FindFirstObjectByType<Board>();
+        board = FindFirstObjectByType<BoardCandy>();
         hintDelaySeconds = hintDelay;
     }
 

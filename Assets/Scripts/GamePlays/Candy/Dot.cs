@@ -12,7 +12,7 @@ public class Dot : MonoBehaviour
     public int row;
 
     private FindingMatches findMatches;
-    private Board board;
+    private BoardCandy board;
     private HintManager hintManager;
     public int targetX;
     public int targetY;
@@ -45,7 +45,7 @@ public class Dot : MonoBehaviour
         isColorBomb = false;
         isAdjacentBomb = false;
         hintManager = FindAnyObjectByType<HintManager>();
-        board = FindAnyObjectByType<Board>();
+        board = FindAnyObjectByType<BoardCandy>();
         findMatches = FindAnyObjectByType<FindingMatches>();
         MakeCharacterAppear();
         // targetX = (int)transform.position.x;

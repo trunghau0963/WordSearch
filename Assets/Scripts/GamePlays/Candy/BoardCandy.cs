@@ -24,7 +24,7 @@ public class TileType
 
 
 
-public class Board : MonoBehaviour
+public class BoardCandy : MonoBehaviour
 {
     private bool[,] blankSpaces;
     private FindingMatches findMatches;

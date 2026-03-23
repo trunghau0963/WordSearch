@@ -6,7 +6,7 @@ using UnityEngine;
 public class CameraScalar : MonoBehaviour
 {
 
-    private Board board;
+    private BoardCandy board;
     public float cameraOffset;
     public float aspectRatio = 0.625f;
     public float padding = 2;
@@ -14,7 +14,7 @@ public class CameraScalar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        board = FindFirstObjectByType<Board>();
+        board = FindFirstObjectByType<BoardCandy>();
         if(board != null)
         {
             RepositionCamera(board.width - 1, board.height - 1);
