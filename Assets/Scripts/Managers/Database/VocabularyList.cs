@@ -6,47 +6,40 @@ using System.IO;
 public class VocabularyList : MonoBehaviour
 {
     public static VocabularyList Instance { get; private set; }
-    // public string fileName;
     List<string> words = new List<string>();
     public DictionaryDB dictionaryDB = new DictionaryDB();
-    void Start()
+    private bool _isDuplicate;
+
+    void Awake()
     {
-        if (Instance != null)
+        if (Instance != null && Instance != this)
         {
-            Debug.LogError("There are multiple VocabularyList instances!");
-            Destroy(gameObject);
+            _isDuplicate = true;
+            DestroyImmediate(gameObject);
+            return;
         }
-        else
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+        dictionaryDB = LoadWordDictionary();
+        if (dictionaryDB != null)
         {
-            Debug.Log("VocabularyList instance created!");
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-            dictionaryDB = LoadWordDictionary();
-            if (dictionaryDB != null)
+            foreach (var word in dictionaryDB.keys)
             {
-                foreach (var word in dictionaryDB.keys)
-                {
-                    words.Add(word);
-                }
+                words.Add(word);
             }
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     private void OnEnable()
     {
-
+        if (_isDuplicate) return;
         GameEvents.OnSaveWordDictionary += SaveVocabularyListToJson;
     }
 
     private void OnDisable()
     {
-
+        if (_isDuplicate) return;
         GameEvents.OnSaveWordDictionary -= SaveVocabularyListToJson;
     }
 

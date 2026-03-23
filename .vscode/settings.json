@@ -56,6 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "WordSearch.sln",
+    "dotnet.defaultSolution": "WordSearch.slnx",
     "git.ignoreLimitWarning": true
 }

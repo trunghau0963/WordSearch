@@ -84,10 +84,11 @@ public class SectionInit : MonoBehaviour
                     }
 
                 }
-                string textProgress = (((float)finishedLevelCount / totalLevelCount) * 100).ToString() + " %";
+                float progress = totalLevelCount > 0 ? (float)finishedLevelCount / totalLevelCount : 0f;
+                string textProgress = (progress * 100).ToString() + " %";
                 // Debug.Log("Section Name: " + section.SectionName + " " + (float)finishedLevelCount / totalLevelCount);
                 Button sectionButton = Instantiate(sectionButtonPrefab, transform).GetComponent<Button>();
-                sectionButton.GetComponent<SectionButton>().Init(section.GetSectionName(), (float)finishedLevelCount / totalLevelCount, section.GetIsLock(), textProgress, section);
+                sectionButton.GetComponent<SectionButton>().Init(section.GetSectionName(), progress, section.GetIsLock(), textProgress, section);
                 sectionButton.interactable = !section.GetIsLock();
                 // Debug.Log(section.SectionName + " " + (float)finishedLevelCount / totalLevelCount);
 

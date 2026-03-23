@@ -49,9 +49,10 @@ public class CategoryButtonInit : MonoBehaviour
                     }
                 }
 
+                float progress = totalSectionCount > 0 ? (float)finishedSectionCount / totalSectionCount : 0f;
                 string textProgress = finishedSectionCount + "/" + totalSectionCount;
                 Button categoryButton = Instantiate(categoryButtonPrefab, transform).GetComponent<Button>();
-                categoryButton.GetComponent<CategoryButton>().Init(category.GetCategoryName(), (float)finishedSectionCount / totalSectionCount, textProgress, category);
+                categoryButton.GetComponent<CategoryButton>().Init(category.GetCategoryName(), progress, textProgress, category);
                 categoryButton.interactable = !category.GetIsLock();
                 // Debug.Log(category.CategoryName + " " + (float)finishedSectionCount / totalSectionCount);
             }

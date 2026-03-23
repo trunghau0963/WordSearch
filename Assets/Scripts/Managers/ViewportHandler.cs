@@ -15,6 +15,10 @@ public class ViewportHandler : MonoBehaviour
 
     private float _width;
     private float _height;
+
+    private int _lastScreenWidth;
+    private int _lastScreenHeight;
+
     //*** bottom screen
     private Vector3 _bl;
     private Vector3 _bc;
@@ -121,6 +125,9 @@ public class ViewportHandler : MonoBehaviour
 
     private void ComputeResolution()
     {
+        _lastScreenWidth = Screen.width;
+        _lastScreenHeight = Screen.height;
+
         float leftX, rightX, topY, bottomY;
 
         if (constraint == Constraint.Landscape)
@@ -129,7 +136,18 @@ public class ViewportHandler : MonoBehaviour
         }
         else
         {
-            camera.orthographicSize = UnitsSize / 2f;
+            // Adjust for ultra-wide/tall aspect ratios (e.g. foldables, tablets)
+            float baseAspect = 9f / 16f; // standard mobile portrait
+            float currentAspect = camera.aspect;
+            if (currentAspect < baseAspect)
+            {
+                // Narrower than 9:16 - scale up to keep content visible
+                camera.orthographicSize = UnitsSize / 2f * (baseAspect / currentAspect);
+            }
+            else
+            {
+                camera.orthographicSize = UnitsSize / 2f;
+            }
         }
 
         _height = 2f * camera.orthographicSize;
@@ -162,6 +180,11 @@ public class ViewportHandler : MonoBehaviour
     {
 #if UNITY_EDITOR
         ComputeResolution();
+#else
+        if (Screen.width != _lastScreenWidth || Screen.height != _lastScreenHeight)
+        {
+            ComputeResolution();
+        }
 #endif
     }
 
