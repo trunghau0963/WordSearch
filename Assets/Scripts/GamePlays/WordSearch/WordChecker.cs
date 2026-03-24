@@ -17,6 +17,7 @@ public class WordChecker : MonoBehaviour
 
     private int _assignedPoints = 0;
     private int _completedWords = 0;
+    private HashSet<string> _foundWords = new();
     private Ray _rayUp, _rayDown, _rayLeft, _rayRight;
     private Ray _rayDiagonalUpLeft, _rayDiagonalUpRight, _rayDiagonalDownLeft, _rayDiagonalDownRight;
     private Ray _currentRay = new Ray();
@@ -28,7 +29,6 @@ public class WordChecker : MonoBehaviour
     {
         GameEvents.OnCheckSquare += SquareSelected;
         GameEvents.OnClearSelection += ClearSelection;
-        GameEvents.OnBoardComplete += () => _completedWords++;
         GameEvents.OnLoadNextBoard += LoadNextBoard;
     }
 
@@ -36,7 +36,6 @@ public class WordChecker : MonoBehaviour
     {
         GameEvents.OnCheckSquare -= SquareSelected;
         GameEvents.OnClearSelection -= ClearSelection;
-        GameEvents.OnBoardComplete -= () => _completedWords++;
         GameEvents.OnLoadNextBoard -= LoadNextBoard;
     }
 
@@ -49,6 +48,7 @@ public class WordChecker : MonoBehaviour
     {
         _assignedPoints = 0;
         _completedWords = 0;
+        _foundWords.Clear();
         gameDataSelector = FindAnyObjectByType<GameDataSelector>();
     }
 
@@ -117,8 +117,9 @@ public class WordChecker : MonoBehaviour
     {
         foreach (var word in GameSessionData.CurrentBoard.SearchWords)
         {
-            if (word.Word == _word)
+            if (word.Word == _word && !_foundWords.Contains(_word))
             {
+                _foundWords.Add(_word);
                 GameEvents.CorrectWordMethod(_word, _correctSquaresList);
                 _completedWords++;
                 _word = string.Empty;

@@ -39,6 +39,8 @@ public class BoardWD : MonoBehaviour
     private List<WordEntry> _levelWords;
     private int _currentWordIndex;
     private bool _isSubmitting;
+    private bool _isPaused;
+    private bool _isGameOver;
 
     // Start is called before the first frame update
     private void Awake()
@@ -129,7 +131,7 @@ public class BoardWD : MonoBehaviour
 
     private void KeyPressCallback(string letter)
     {
-        if (_isSubmitting) return;
+        if (_isSubmitting || _isPaused || _isGameOver) return;
 
         Row currentRow = rows[rowIndex];
         if (letter == "Delete")
@@ -315,13 +317,25 @@ public class BoardWD : MonoBehaviour
     {
         if (tryAgainButton != null) tryAgainButton.interactable = false;
         if (newWordButton != null) newWordButton.interactable = false;
+
+        GameEvents.OnPauseGame += OnPause;
+        GameEvents.OnResumeGame += OnResume;
+        GameEvents.OnGameOver += OnGameOverEvent;
     }
 
     private void OnDisable()
     {
         if (tryAgainButton != null) tryAgainButton.interactable = true;
         if (newWordButton != null) newWordButton.interactable = true;
+
+        GameEvents.OnPauseGame -= OnPause;
+        GameEvents.OnResumeGame -= OnResume;
+        GameEvents.OnGameOver -= OnGameOverEvent;
     }
+
+    private void OnPause() { _isPaused = true; }
+    private void OnResume() { _isPaused = false; }
+    private void OnGameOverEvent() { _isGameOver = true; }
 
     private void OnDestroy()
     {

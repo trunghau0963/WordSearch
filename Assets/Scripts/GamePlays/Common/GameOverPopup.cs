@@ -4,6 +4,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+/// Generic game-over popup template for all gameplay scenes.
+/// Place this component in any gameplay scene and wire UI references.
+/// Subscribes to GameEvents.OnGameOver — scene-local, no cross-gameplay interference.
+/// </summary>
 public class GameOverPopup : MonoBehaviour
 {
     public GameObject gameOverPopup;
@@ -33,7 +38,10 @@ public class GameOverPopup : MonoBehaviour
             retryButton.onClick.AddListener(OnRetry);
         if (returnToMenuButton != null)
             returnToMenuButton.onClick.AddListener(OnReturnToMenu);
+    }
 
+    private void OnEnable()
+    {
         GameEvents.OnGameOver += ShowGameOverPopup;
     }
 

@@ -52,26 +52,55 @@ public class WordScamble : MonoBehaviour
     public Transform container;
     public float space;
     List<CharObj> charObjects = new();
-    CharObj firstSelected;
     public int currentWord;
     public static WordScamble main;
+
+    [Header("Word Constraints")]
+    [SerializeField] private int maxWordLength = 6;
 
     [Header("Animation")]
     [SerializeField] private float spawnStagger = 0.08f;
     [SerializeField] private float correctDelay = 0.8f;
     [SerializeField] private float transitionDelay = 0.5f;
+    [SerializeField] private float swapSlideTime = 0.25f;
 
     DictionaryDB dictionaryDB = new DictionaryDB();
     private bool _isChecking;
     private bool _isTransitioning;
+    private bool _isPaused;
+    private bool _isGameOver;
 
-    /// <summary> True when input should be blocked (during check/transition animations). </summary>
-    public bool IsInputBlocked => _isChecking || _isTransitioning;
+    // Drag state
+    private CharObj _draggedChar;
+    private CharObj _hoveredChar;
+    private int _dragOriginalIndex;
+
+    /// <summary> True when input should be blocked (during check/transition/pause/gameover). </summary>
+    public bool IsInputBlocked => _isChecking || _isTransitioning || _isPaused || _isGameOver;
 
     void Awake()
     {
         main = this;
     }
+
+    private void OnEnable()
+    {
+        GameEvents.OnPauseGame += OnPause;
+        GameEvents.OnResumeGame += OnResume;
+        GameEvents.OnGameOver += OnGameOver;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnPauseGame -= OnPause;
+        GameEvents.OnResumeGame -= OnResume;
+        GameEvents.OnGameOver -= OnGameOver;
+    }
+
+    private void OnPause() { _isPaused = true; }
+    private void OnResume() { _isPaused = false; }
+    private void OnGameOver() { _isGameOver = true; }
+
     void Start()
     {
         // Priority 1: LevelPlayDataHolder (from level select menu)
@@ -94,6 +123,10 @@ public class WordScamble : MonoBehaviour
                 words.Add(new Word(w, ""));
             }
         }
+
+        // Filter out words that exceed maxWordLength
+        if (words != null)
+            words.RemoveAll(w => w.word.Length > maxWordLength);
 
         if (words != null && words.Count > 0)
         {
@@ -119,16 +152,26 @@ public class WordScamble : MonoBehaviour
             float center = (charObjects.Count - 1) / 2f;
             for (int i = 0; i < charObjects.Count; i++)
             {
-                if (charObjects[i] != null && charObjects[i].reactTransform != null)
-                {
-                    Vector2 target = new Vector2((i - center) * space, 0);
-                    charObjects[i].reactTransform.anchoredPosition = Vector2.Lerp(
-                        charObjects[i].reactTransform.anchoredPosition,
-                        target, lerpSpeed * Time.deltaTime);
-                    charObjects[i].index = i;
-                }
+                // Skip the card being dragged — it follows the pointer
+                if (charObjects[i] == null || charObjects[i].reactTransform == null) continue;
+                if (charObjects[i].IsDragging) continue;
+
+                Vector2 target = GetSlotPosition(i);
+                charObjects[i].reactTransform.anchoredPosition = Vector2.Lerp(
+                    charObjects[i].reactTransform.anchoredPosition,
+                    target, lerpSpeed * Time.deltaTime);
+                charObjects[i].index = i;
             }
         }
+    }
+
+    /// <summary>
+    /// Calculate the slot position for a given index.
+    /// </summary>
+    public Vector2 GetSlotPosition(int i)
+    {
+        float center = (charObjects.Count - 1) / 2f;
+        return new Vector2((i - center) * space, 0);
     }
 
     public void ShowScrambleWord()
@@ -171,38 +214,83 @@ public class WordScamble : MonoBehaviour
         _isTransitioning = false;
     }
 
-    public void Swap(int indexA, int indexB)
-    {
-        if (_isChecking || _isTransitioning) return;
+    // ── Drag & Drop Handlers ─────────────────────────────────────────
 
-        (charObjects[indexB], charObjects[indexA]) = (charObjects[indexA], charObjects[indexB]);
-        charObjects[indexA].transform.SetSiblingIndex(indexB);
-        charObjects[indexB].transform.SetSiblingIndex(indexA);
-        RepositionObject();
-        CheckWord();
+    public void OnCharDragBegin(CharObj dragged)
+    {
+        _draggedChar = dragged;
+        _dragOriginalIndex = dragged.index;
+        _hoveredChar = null;
     }
 
-    public void Select(CharObj charObj)
+    public void OnCharDragging(CharObj dragged)
     {
-        if (_isChecking || _isTransitioning) return;
+        // Find the nearest other CharObj that the dragged card is hovering over
+        CharObj nearest = null;
+        float minDist = float.MaxValue;
 
-        if (firstSelected)
+        for (int i = 0; i < charObjects.Count; i++)
         {
-            Swap(firstSelected.index, charObj.index);
-            firstSelected.Select();
-            charObj.Select();
+            if (charObjects[i] == dragged) continue;
+            float dist = Vector2.Distance(dragged.reactTransform.anchoredPosition, GetSlotPosition(i));
+            if (dist < space * 0.7f && dist < minDist)
+            {
+                minDist = dist;
+                nearest = charObjects[i];
+            }
+        }
+
+        // Update highlight
+        if (nearest != _hoveredChar)
+        {
+            if (_hoveredChar != null) _hoveredChar.SetHighlight(false);
+            _hoveredChar = nearest;
+            if (_hoveredChar != null) _hoveredChar.SetHighlight(true);
+        }
+    }
+
+    public void OnCharDragEnd(CharObj dragged)
+    {
+        // Clear highlight
+        if (_hoveredChar != null)
+        {
+            _hoveredChar.SetHighlight(false);
+
+            int indexA = dragged.index;
+            int indexB = _hoveredChar.index;
+
+            if (indexA != indexB)
+            {
+                // Swap in the list
+                (charObjects[indexA], charObjects[indexB]) = (charObjects[indexB], charObjects[indexA]);
+                charObjects[indexA].index = indexA;
+                charObjects[indexB].index = indexB;
+
+                // Animate the swapped card to its new slot
+                charObjects[indexA].AnimateToPosition(GetSlotPosition(indexA), swapSlideTime);
+                // Animate the dragged card to its new slot
+                charObjects[indexB].AnimateToPosition(GetSlotPosition(indexB), swapSlideTime);
+
+                // Check word after swap animation completes
+                LeanTween.delayedCall(swapSlideTime + 0.05f, () => CheckWord());
+            }
+            else
+            {
+                // Dropped on same slot — snap back
+                dragged.AnimateToPosition(GetSlotPosition(indexA), swapSlideTime * 0.5f);
+            }
         }
         else
         {
-            firstSelected = charObj;
-            charObj.AnimateSelect();
+            // No valid target — snap back to original position
+            dragged.AnimateToPosition(GetSlotPosition(dragged.index), swapSlideTime * 0.5f);
         }
+
+        _draggedChar = null;
+        _hoveredChar = null;
     }
 
-    public void UnSelect()
-    {
-        firstSelected = null;
-    }
+    // ── Word Check ────────────────────────────────────────────────
 
     public void CheckWord()
     {

@@ -1,8 +1,9 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class CharObj : MonoBehaviour
+public class CharObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public char charName;
     public TMP_Text text;
@@ -10,13 +11,29 @@ public class CharObj : MonoBehaviour
     public RectTransform reactTransform;
     public int index;
 
-    bool isSelected = false;
-
     [Header("Appearance")]
     public Color normalColor;
     public Color selectedColor;
     public Color wrongColor;
     public Color correctColor;
+
+    [Header("Drag Settings")]
+    [SerializeField] private float liftScale = 1.15f;
+    [SerializeField] private float liftDuration = 0.15f;
+    [SerializeField] private float dropDuration = 0.15f;
+
+    private bool _isDragging;
+    private Vector2 _dragOffset;
+    private CanvasGroup _canvasGroup;
+
+    public bool IsDragging => _isDragging;
+
+    private void Awake()
+    {
+        _canvasGroup = GetComponent<CanvasGroup>();
+        if (_canvasGroup == null)
+            _canvasGroup = gameObject.AddComponent<CanvasGroup>();
+    }
 
     public CharObj SetChar(char c)
     {
@@ -27,29 +44,89 @@ public class CharObj : MonoBehaviour
         return this;
     }
 
-    public void Select()
+    // ── Drag Handlers ──────────────────────────────────────────────
+
+    public void OnBeginDrag(PointerEventData eventData)
     {
-        // Block input during check/transition animations
         if (WordScamble.main != null && WordScamble.main.IsInputBlocked) return;
 
-        isSelected = !isSelected;
-        image.color = isSelected ? selectedColor : normalColor;
-        if (isSelected)
-        {
-            WordScamble.main.Select(this);
-        }
-        else
-        {
-            WordScamble.main.UnSelect();
-        }
+        _isDragging = true;
+
+        // Calculate drag offset so card doesn't jump to pointer center
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            reactTransform.parent as RectTransform,
+            eventData.position,
+            eventData.pressEventCamera,
+            out Vector2 localPoint);
+        _dragOffset = reactTransform.anchoredPosition - localPoint;
+
+        // Bring to front
+        transform.SetAsLastSibling();
+
+        // Lift animation: scale up + slight shadow via reduced alpha on others
+        image.color = selectedColor;
+        _canvasGroup.blocksRaycasts = false; // allow raycasts to pass through to slots below
+        LeanTween.cancel(gameObject);
+        LeanTween.scale(gameObject, Vector3.one * liftScale, liftDuration).setEaseOutBack();
+
+        if (WordScamble.main != null) WordScamble.main.OnCharDragBegin(this);
     }
 
-    public string ShowActive(){
-        if(gameObject.activeSelf && text.gameObject.activeSelf && image.gameObject.activeSelf){
-            return "Active";
-        }
-        return "Inactive";
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (!_isDragging) return;
+
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            reactTransform.parent as RectTransform,
+            eventData.position,
+            eventData.pressEventCamera,
+            out Vector2 localPoint);
+        reactTransform.anchoredPosition = localPoint + _dragOffset;
+
+        if (WordScamble.main != null) WordScamble.main.OnCharDragging(this);
     }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (!_isDragging) return;
+        _isDragging = false;
+
+        // Drop animation: scale back, restore color
+        _canvasGroup.blocksRaycasts = true;
+        image.color = normalColor;
+        LeanTween.cancel(gameObject);
+        LeanTween.scale(gameObject, Vector3.one, dropDuration).setEaseOutQuad();
+
+        if (WordScamble.main != null) WordScamble.main.OnCharDragEnd(this);
+    }
+
+    // ── Visual Feedback ────────────────────────────────────────────
+
+    /// <summary>
+    /// Highlight/unhighlight when another card hovers over this slot.
+    /// </summary>
+    public void SetHighlight(bool highlight)
+    {
+        image.color = highlight ? selectedColor : normalColor;
+    }
+
+    /// <summary>
+    /// Smooth slide to a target position (used after swap).
+    /// </summary>
+    public void AnimateToPosition(Vector2 targetPos, float duration = 0.25f, float delay = 0f)
+    {
+        LeanTween.cancel(gameObject);
+        transform.localScale = Vector3.one;
+        LeanTween.value(gameObject, reactTransform.anchoredPosition, targetPos, duration)
+            .setDelay(delay)
+            .setEaseOutQuad()
+            .setOnUpdate((Vector2 pos) =>
+            {
+                reactTransform.anchoredPosition = pos;
+            });
+    }
+
+    // ── Game Animations ────────────────────────────────────────────
 
     /// <summary>
     /// Plays a celebration animation when the character is in the correct position.
@@ -87,17 +164,10 @@ public class CharObj : MonoBehaviour
             });
     }
 
-    /// <summary>
-    /// Plays the selection bounce animation.
-    /// </summary>
-    public void AnimateSelect()
+    public string ShowActive()
     {
-        LeanTween.cancel(gameObject);
-        LeanTween.scale(gameObject, Vector3.one * 1.15f, 0.1f)
-            .setEaseOutQuad()
-            .setOnComplete(() =>
-            {
-                LeanTween.scale(gameObject, Vector3.one, 0.1f).setEaseInQuad();
-            });
+        if (gameObject.activeSelf && text.gameObject.activeSelf && image.gameObject.activeSelf)
+            return "Active";
+        return "Inactive";
     }
 }

@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: Word Zee
   sceneName: WordZee
   minWordLength: 3
-  maxWordLength: 8
+  maxWordLength: 6
   singleWordOnly: 0
   wordsPerLevel1: 3
   wordsPerLevel2: 5

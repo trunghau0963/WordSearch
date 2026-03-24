@@ -4,6 +4,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+/// Generic win popup template for all gameplay scenes.
+/// Place this component on a GameObject in any gameplay scene (WordSearch, WordZee, Wordle, etc.)
+/// and wire the UI references. It subscribes to GameEvents.OnShowPopup, which is scene-local
+/// (destroyed with the scene), so there is no cross-gameplay interference.
+/// </summary>
 public class WinPopup : MonoBehaviour
 {
     public GameObject winPopup;
@@ -19,6 +25,12 @@ public class WinPopup : MonoBehaviour
 
     void Start()
     {
+        if (winPopup == null)
+        {
+            Debug.LogError("[WinPopup] winPopup panel is not assigned! Win popup will not work.");
+            return;
+        }
+
         winPopup.SetActive(false);
 
         _popupRect = winPopup.GetComponent<RectTransform>();
@@ -44,6 +56,14 @@ public class WinPopup : MonoBehaviour
 
     void ShowWinPopup(bool isCompletedLevel)
     {
+        if (winPopup == null)
+        {
+            Debug.LogError("[WinPopup] Cannot show popup — winPopup panel reference is missing!");
+            return;
+        }
+
+        Debug.Log($"[WinPopup] ShowWinPopup called (isCompletedLevel={isCompletedLevel})");
+
         _isCompletedLevel = isCompletedLevel;
 
         var loadData = FindAnyObjectByType<LoadData>();

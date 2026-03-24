@@ -217,8 +217,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 00.00
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8a7da6cae76bf124e8dc154efe54d790, type: 2}
-  m_sharedMaterial: {fileID: -3479966147405583602, guid: 8a7da6cae76bf124e8dc154efe54d790, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -253,6 +253,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -295,7 +296,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5799049068638940425}
-  - component: {fileID: 1195557534480399422}
+  - component: {fileID: 2717421398385161982}
   m_Layer: 5
   m_Name: Clock
   m_TagString: Untagged
@@ -325,7 +326,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1195557534480399422
+--- !u!114 &2717421398385161982
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -334,8 +335,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 8073669873822151163}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1306c9caf9afced4fa6df76f40aabdec, type: 3}
+  m_Script: {fileID: 11500000, guid: 98b6b3f294eca8a46ac2a135b602d91c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentGameData: {fileID: 11400000, guid: 5bcedea2420b2344194f30c64702eebb, type: 2}
   timerText: {fileID: 7490895516830964497}
+  defaultTime: 120
