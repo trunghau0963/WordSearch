@@ -26,6 +26,11 @@ public class ScreenOrientationHandler : MonoBehaviour
         Screen.autorotateToPortraitUpsideDown = true;
         Screen.orientation = ScreenOrientation.Portrait;
 
+#if UNITY_EDITOR
+        // In Editor, force the Game view to portrait resolution
+        ForceEditorPortrait();
+#endif
+
         // Fade out the overlay after a short delay to allow orientation to settle
         if (_fadeOverlay != null)
         {
@@ -52,7 +57,41 @@ public class ScreenOrientationHandler : MonoBehaviour
         Screen.autorotateToPortrait = false;
         Screen.autorotateToPortraitUpsideDown = false;
         Screen.orientation = ScreenOrientation.LandscapeLeft;
+
+#if UNITY_EDITOR
+        ForceEditorLandscape();
+#endif
     }
+
+#if UNITY_EDITOR
+    private static int _previousWidth;
+    private static int _previousHeight;
+
+    private void ForceEditorPortrait()
+    {
+        _previousWidth = Screen.width;
+        _previousHeight = Screen.height;
+
+        // Swap to portrait if currently landscape
+        if (Screen.width > Screen.height)
+        {
+            Screen.SetResolution(Screen.height, Screen.width, false);
+        }
+    }
+
+    private void ForceEditorLandscape()
+    {
+        // Restore previous resolution, or swap back to landscape
+        if (_previousWidth > 0 && _previousHeight > 0)
+        {
+            Screen.SetResolution(_previousWidth, _previousHeight, false);
+        }
+        else if (Screen.height > Screen.width)
+        {
+            Screen.SetResolution(Screen.height, Screen.width, false);
+        }
+    }
+#endif
 
     private void CreateFadeOverlay()
     {

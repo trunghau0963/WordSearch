@@ -54,6 +54,7 @@ public class GridSquare : MonoBehaviour
         GameEvents.OnDisableSquareSelection += OnDisableSquareSelection;
         GameEvents.OnSelectSquare += SelectSquare;
         GameEvents.OnCorrectWord += CorrectWord;
+        GameEvents.OnRevealWord += RevealWord;
         GameEvents.OnClearSelection += OnWrongSelection;
         GameEvents.OnPauseGame += OnPauseGame;
         GameEvents.OnResumeGame += OnResumeGame;
@@ -65,6 +66,7 @@ public class GridSquare : MonoBehaviour
         GameEvents.OnDisableSquareSelection -= OnDisableSquareSelection;
         GameEvents.OnSelectSquare -= SelectSquare;
         GameEvents.OnCorrectWord -= CorrectWord;
+        GameEvents.OnRevealWord -= RevealWord;
         GameEvents.OnClearSelection -= OnWrongSelection;
         GameEvents.OnPauseGame -= OnPauseGame;
         GameEvents.OnResumeGame -= OnResumeGame;
@@ -206,6 +208,40 @@ public class GridSquare : MonoBehaviour
             {
                 float decay = 1f - t;
                 float offsetX = Mathf.Sin(t * Mathf.PI * 8f) * ShakeIntensity * decay;
+                transform.localPosition = startPos + new Vector3(offsetX, 0f, 0f);
+            })
+            .setOnComplete(() =>
+            {
+                transform.localPosition = startPos;
+            })
+            .setEase(LeanTweenType.linear);
+    }
+
+    public void RevealWord(string word, List<int> squareIdx)
+    {
+        if (!squareIdx.Contains(_index)) return;
+        if (_correct) return; // already found by player
+
+        _correct = true;
+        _displayedImage.sprite = _correctLetterData.Image;
+
+        // Yellow tint
+        _displayedImage.color = new Color(1f, 0.92f, 0.016f, 1f);
+
+        // Shake animation
+        PlayRevealShakeAnimation();
+    }
+
+    private void PlayRevealShakeAnimation()
+    {
+        LeanTween.cancel(gameObject);
+        var startPos = transform.localPosition;
+
+        LeanTween.value(gameObject, 0f, 1f, 0.5f)
+            .setOnUpdate((float t) =>
+            {
+                float decay = 1f - t;
+                float offsetX = Mathf.Sin(t * Mathf.PI * 10f) * 0.12f * decay;
                 transform.localPosition = startPos + new Vector3(offsetX, 0f, 0f);
             })
             .setOnComplete(() =>

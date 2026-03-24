@@ -65,7 +65,7 @@ public class GameDataSelector : MonoBehaviour
             return;
         }
 
-        generated.timeInSeconds = defaultTimeInSeconds;
+        generated.timeInSeconds = playData.timeInSeconds > 0f ? playData.timeInSeconds : defaultTimeInSeconds;
         GameSessionData.CurrentBoard = generated;
 
         // Also set legacy GameData if assigned (for backward compatibility)

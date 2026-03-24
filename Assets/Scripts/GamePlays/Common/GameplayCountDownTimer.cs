@@ -1,11 +1,13 @@
 using TMPro;
 using UnityEngine;
+using System.Collections;
 
 /// <summary>
 /// Generic countdown timer for any gameplay scene (WordSearch, WordZee, Wordle, etc.).
-/// - Reads time from GameSessionData.CurrentBoard.timeInSeconds if available (WordSearch),
-///   otherwise falls back to defaultTime (WordZee, Wordle, ...).
-/// - Fires GameEvents.GameOverlMethod() when time runs out.
+/// - Reads time from LevelPlayData.timeInSeconds (per-level config) if available,
+///   then from GameSessionData.CurrentBoard.timeInSeconds (WordSearch legacy),
+///   otherwise falls back to defaultTime.
+/// - Fires RevealAnswers first, waits for reveal, then fires GameOver.
 /// - Responds to PauseGame / ResumeGame events.
 /// - Stops on ShowPopup (win), BoardComplete, UnlockNextBoard, or GameOver.
 /// </summary>
@@ -17,15 +19,24 @@ public class GameplayCountDownTimer : MonoBehaviour
     [Tooltip("Fallback time (seconds) when GameSessionData has no board data")]
     [SerializeField] private float defaultTime = 120f;
 
+    [Header("Reveal Settings")]
+    [Tooltip("Seconds to wait after revealing answers before showing GameOver popup")]
+    [SerializeField] private float revealDuration = 3f;
+
     private float _timeLeft;
     private bool _timeOut;
     private bool _stopTimer;
 
     void Start()
     {
-        // WordSearch: read from board data if available; other gameplays: use defaultTime
-        if (GameSessionData.CurrentBoard != null && GameSessionData.CurrentBoard.timeInSeconds > 0f)
+        // Priority 1: LevelPlayData.timeInSeconds (from GameplayConfig per-level time)
+        var holder = LevelPlayDataHolder.Instance;
+        if (holder != null && holder.CurrentData != null && holder.CurrentData.timeInSeconds > 0f)
+            _timeLeft = holder.CurrentData.timeInSeconds;
+        // Priority 2: WordSearch board data
+        else if (GameSessionData.CurrentBoard != null && GameSessionData.CurrentBoard.timeInSeconds > 0f)
             _timeLeft = GameSessionData.CurrentBoard.timeInSeconds;
+        // Priority 3: Inspector fallback
         else
             _timeLeft = defaultTime;
 
@@ -68,8 +79,7 @@ public class GameplayCountDownTimer : MonoBehaviour
             _timeOut = true;
             _stopTimer = true;
             UpdateDisplay();
-            GameEvents.GameOverlMethod();
-            GameEvents.SaveWordDictionaryMethod(); // WordSearch saves vocab on game over
+            StartCoroutine(RevealThenGameOver());
             return;
         }
 
@@ -94,6 +104,19 @@ public class GameplayCountDownTimer : MonoBehaviour
     {
         if (!_timeOut)
             _stopTimer = false;
+    }
+
+    private IEnumerator RevealThenGameOver()
+    {
+        // 1) Tell each gameplay to reveal the correct answer
+        GameEvents.RevealAnswersMethod();
+
+        // 2) Wait for reveal animation to complete
+        yield return new WaitForSeconds(revealDuration);
+
+        // 3) Now fire game over + save
+        GameEvents.GameOverlMethod();
+        GameEvents.SaveWordDictionaryMethod();
     }
 }
 

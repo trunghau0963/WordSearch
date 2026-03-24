@@ -19,6 +19,12 @@ public class LevelPlayData
     // Grid dimensions (for grid-based games)
     public int gridRows;
     public int gridCols;
+
+    // Time limit in seconds (from GameplayConfig)
+    public float timeInSeconds;
+
+    // Effective number of levels for this group (1 when levels were skipped)
+    public int totalLevelsInGroup = 3;
 }
 
 [System.Serializable]

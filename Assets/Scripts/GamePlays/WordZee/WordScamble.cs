@@ -88,6 +88,7 @@ public class WordScamble : MonoBehaviour
         GameEvents.OnPauseGame += OnPause;
         GameEvents.OnResumeGame += OnResume;
         GameEvents.OnGameOver += OnGameOver;
+        GameEvents.OnRevealAnswers += RevealCorrectOrder;
     }
 
     private void OnDisable()
@@ -95,6 +96,7 @@ public class WordScamble : MonoBehaviour
         GameEvents.OnPauseGame -= OnPause;
         GameEvents.OnResumeGame -= OnResume;
         GameEvents.OnGameOver -= OnGameOver;
+        GameEvents.OnRevealAnswers -= RevealCorrectOrder;
     }
 
     private void OnPause() { _isPaused = true; }
@@ -342,20 +344,49 @@ public class WordScamble : MonoBehaviour
         if (holder == null || holder.CurrentData == null) return true;
 
         var data = holder.CurrentData;
-        var allTopics = TopicDataParser.ParseFromResources();
-        foreach (var topic in allTopics)
+        return data.level >= data.totalLevelsInGroup;
+    }
+
+    private void RevealCorrectOrder()
+    {
+        if (currentWord >= words.Count || charObjects.Count == 0) return;
+        _isTransitioning = true;
+
+        string correct = words[currentWord].word;
+        // Build target mapping: for each position i in the correct word,
+        // find the CharObj that currently holds correct[i] and swap into slot i.
+        // Use a simple selection approach so each char is used only once.
+        bool[] used = new bool[charObjects.Count];
+
+        CharObj[] ordered = new CharObj[correct.Length];
+        for (int i = 0; i < correct.Length; i++)
         {
-            if (topic.topicName == data.topicName)
+            for (int j = 0; j < charObjects.Count; j++)
             {
-                foreach (var group in topic.groups)
+                if (!used[j] && charObjects[j].charName == correct[i])
                 {
-                    if (group.groupName == data.groupName)
-                    {
-                        return data.level >= group.levelCount;
-                    }
+                    ordered[i] = charObjects[j];
+                    used[j] = true;
+                    break;
                 }
             }
         }
-        return true;
+
+        // Animate each CharObj: slide to correct slot → turn yellow → shake
+        for (int i = 0; i < ordered.Length; i++)
+        {
+            if (ordered[i] == null) continue;
+            ordered[i].AnimateReveal(GetSlotPosition(i), 0.5f, i * 0.15f);
+        }
+
+        // Update the list so RepositionObject doesn't fight the animation
+        for (int i = 0; i < ordered.Length; i++)
+        {
+            if (ordered[i] != null)
+            {
+                charObjects[i] = ordered[i];
+                charObjects[i].index = i;
+            }
+        }
     }
 }

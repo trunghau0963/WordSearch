@@ -164,6 +164,43 @@ public class CharObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
             });
     }
 
+    /// <summary>
+    /// Reveal animation: slide to correct position, turn yellow, then shake.
+    /// </summary>
+    public void AnimateReveal(Vector2 targetPos, float slideDuration, float delay)
+    {
+        LeanTween.cancel(gameObject);
+        transform.localScale = Vector3.one;
+
+        // 1) Slide to correct slot
+        LeanTween.value(gameObject, reactTransform.anchoredPosition, targetPos, slideDuration)
+            .setDelay(delay)
+            .setEaseOutQuad()
+            .setOnUpdate((Vector2 pos) =>
+            {
+                reactTransform.anchoredPosition = pos;
+            })
+            .setOnComplete(() =>
+            {
+                // 2) Turn yellow
+                image.color = new Color(1f, 0.92f, 0.016f, 1f);
+
+                // 3) Shake
+                var startPos = reactTransform.anchoredPosition;
+                LeanTween.value(gameObject, 0f, 1f, 0.5f)
+                    .setOnUpdate((float t) =>
+                    {
+                        float decay = 1f - t;
+                        float offset = Mathf.Sin(t * Mathf.PI * 10f) * 8f * decay;
+                        reactTransform.anchoredPosition = startPos + new Vector2(offset, 0f);
+                    })
+                    .setOnComplete(() =>
+                    {
+                        reactTransform.anchoredPosition = startPos;
+                    });
+            });
+    }
+
     public string ShowActive()
     {
         if (gameObject.activeSelf && text.gameObject.activeSelf && image.gameObject.activeSelf)

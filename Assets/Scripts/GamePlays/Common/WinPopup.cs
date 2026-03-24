@@ -72,8 +72,11 @@ public class WinPopup : MonoBehaviour
         // Save to play history
         SavePlayHistory();
 
+        // Even if all levels in this group are done, check if there's a next group to play
+        bool hasNextAction = !isCompletedLevel || HasNextGroup();
+
         // Configure buttons
-        if (nextLevelButton != null) nextLevelButton.gameObject.SetActive(!isCompletedLevel);
+        if (nextLevelButton != null) nextLevelButton.gameObject.SetActive(hasNextAction);
         if (returnToMenuButton != null) returnToMenuButton.gameObject.SetActive(true);
 
         // Animate in
@@ -86,6 +89,43 @@ public class WinPopup : MonoBehaviour
         LeanTween.scale(_popupRect, Vector3.one, animDuration).setEaseOutBack();
     }
 
+    /// <summary>
+    /// Check if there's a next playable group after the current one.
+    /// </summary>
+    private bool HasNextGroup()
+    {
+        var holder = LevelPlayDataHolder.Instance;
+        if (holder == null || holder.CurrentData == null) return false;
+
+        var current = holder.CurrentData;
+        var configs = Resources.LoadAll<GameplayConfig>("GameplayConfigs");
+        GameplayConfig config = null;
+        foreach (var c in configs)
+        {
+            if (c.gameplayId == current.gameplayId) { config = c; break; }
+        }
+        if (config == null) return false;
+
+        var allTopics = TopicDataParser.ParseFromResources();
+        TopicData topicData = null;
+        GroupQuestionData groupData = null;
+        foreach (var t in allTopics)
+        {
+            if (t.topicName == current.topicName)
+            {
+                topicData = t;
+                foreach (var g in t.groups)
+                {
+                    if (g.groupName == current.groupName) { groupData = g; break; }
+                }
+                break;
+            }
+        }
+
+        if (topicData == null || groupData == null) return false;
+        return FindNextPlayableGroup(config, topicData, groupData) != null;
+    }
+
     private void SavePlayHistory()
     {
         if (PlayHistory.Instance == null) return;
@@ -94,30 +134,9 @@ public class WinPopup : MonoBehaviour
         if (holder == null || holder.CurrentData == null) return;
 
         var data = holder.CurrentData;
-        int totalLevels = 3; // default level count per group
+        int totalLevels = data.totalLevelsInGroup;
 
-        // Try to get actual topic data for full completion check
         List<TopicData> allTopics = TopicDataParser.ParseFromResources();
-
-        // Find the actual level count from the group
-        if (allTopics != null)
-        {
-            foreach (var topic in allTopics)
-            {
-                if (topic.topicName == data.topicName)
-                {
-                    foreach (var group in topic.groups)
-                    {
-                        if (group.groupName == data.groupName)
-                        {
-                            totalLevels = group.levelCount;
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
-        }
 
         PlayHistory.Instance.CompleteLevel(
             data.gameplayId, data.topicName, data.groupName,
@@ -141,7 +160,7 @@ public class WinPopup : MonoBehaviour
     {
         AnimateOut(() =>
         {
-            // Try to advance to next level
+            // Try to advance to next level or next group
             var holder = LevelPlayDataHolder.Instance;
             if (holder != null && holder.CurrentData != null)
             {
@@ -174,13 +193,37 @@ public class WinPopup : MonoBehaviour
                         }
                     }
 
-                    if (groupData != null && nextLevel <= groupData.levelCount)
+                    // If there are still levels to play in this group
+                    if (groupData != null && nextLevel <= current.totalLevelsInGroup)
                     {
                         LevelPlayData nextData = LevelWordGenerator.Generate(
                             config, topicData, groupData, nextLevel);
+                        nextData.totalLevelsInGroup = current.totalLevelsInGroup;
                         holder.SetData(nextData);
                         LoadScene(nextData.sceneName);
                         return;
+                    }
+
+                    // Levels exhausted — try to advance to the next group in the topic
+                    if (topicData != null)
+                    {
+                        GroupQuestionData nextGroup = FindNextPlayableGroup(
+                            config, topicData, groupData);
+
+                        if (nextGroup != null)
+                        {
+                            // Determine effective level count for the next group
+                            int compatible = CountCompatibleWords(config, nextGroup);
+                            bool skipLevels = ShouldSkipLevels(config, compatible);
+                            int effectiveLevels = skipLevels ? 1 : nextGroup.levelCount;
+
+                            LevelPlayData nextData = LevelWordGenerator.Generate(
+                                config, topicData, nextGroup, 1);
+                            nextData.totalLevelsInGroup = effectiveLevels;
+                            holder.SetData(nextData);
+                            LoadScene(nextData.sceneName);
+                            return;
+                        }
                     }
                 }
             }
@@ -188,6 +231,57 @@ public class WinPopup : MonoBehaviour
             // Fallback: return to menu
             LoadMainMenu();
         });
+    }
+
+    /// <summary>
+    /// Find the next group in the topic that has compatible words and hasn't been completed yet.
+    /// </summary>
+    private GroupQuestionData FindNextPlayableGroup(
+        GameplayConfig config, TopicData topic, GroupQuestionData currentGroup)
+    {
+        bool foundCurrent = false;
+
+        foreach (var group in topic.groups)
+        {
+            if (group.groupName == currentGroup.groupName)
+            {
+                foundCurrent = true;
+                continue;
+            }
+
+            if (!foundCurrent) continue;
+
+            // Check if this group has compatible words and is not completed
+            int compatible = CountCompatibleWords(config, group);
+            if (compatible <= 0) continue;
+
+            bool done = PlayHistory.Instance != null &&
+                        PlayHistory.Instance.IsGroupCompleted(
+                            config.gameplayId, topic.topicName, group.groupName);
+            if (done) continue;
+
+            return group;
+        }
+        return null;
+    }
+
+    private int CountCompatibleWords(GameplayConfig config, GroupQuestionData group)
+    {
+        int count = 0;
+        foreach (var word in group.words)
+        {
+            if (config.IsWordCompatible(word)) count++;
+        }
+        return count;
+    }
+
+    private bool ShouldSkipLevels(GameplayConfig config, int compatible)
+    {
+        if (config.singleWordOnly)
+            return compatible <= 1;
+
+        int minLevelWords = config.wordsPerLevel1;
+        return compatible <= minLevelWords || compatible < config.wordsPerLevel2;
     }
 
     private void OnReturnToMenu()

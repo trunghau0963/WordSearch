@@ -153,8 +153,40 @@ public class LevelSelectMenu : Panel
         ShowGroups(topic);
     }
 
+    // Track whether the current group selection skipped levels
+    private bool _skippedLevels;
+
     private void OnGroupClicked(GroupQuestionData group)
     {
+        int compatible = CountCompatibleWords(group);
+
+        // Determine whether to skip level selection and go straight into the game.
+        _skippedLevels = false;
+
+        if (_currentConfig.singleWordOnly)
+        {
+            // Wordle: only 1 word per round — skip if ≤1 compatible word
+            _skippedLevels = compatible <= 1;
+        }
+        else
+        {
+            // Multi-word gameplays (WordZee, etc.):
+            // Skip if too few compatible words to differentiate levels,
+            // or if all 3 levels would use the exact same word set.
+            int minLevelWords = _currentConfig.wordsPerLevel1;
+            bool allLevelsSame = compatible <= minLevelWords;
+            bool tooFewWords = compatible < _currentConfig.wordsPerLevel2;
+
+            _skippedLevels = allLevelsSame || tooFewWords;
+        }
+
+        if (_skippedLevels)
+        {
+            _selectedGroup = group;
+            OnLevelClicked(1);
+            return;
+        }
+
         ShowLevels(group);
     }
 
@@ -163,6 +195,9 @@ public class LevelSelectMenu : Panel
         // Generate word set for this level
         LevelPlayData playData = LevelWordGenerator.Generate(
             _currentConfig, _selectedTopic, _selectedGroup, level);
+
+        // Set effective total levels (1 if levels were skipped)
+        playData.totalLevelsInGroup = _skippedLevels ? 1 : _selectedGroup.levelCount;
 
         if (playData.words.Count == 0)
         {

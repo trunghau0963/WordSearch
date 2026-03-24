@@ -35,7 +35,8 @@ public class Tiles : MonoBehaviour
     public void SetState(State state)
     {
         this.state = state;
-        fill.color = state.fillColor;
-        outline.effectColor = state.outlineColor;
+        if (state == null) return;
+        if (fill != null) fill.color = state.fillColor;
+        if (outline != null) outline.effectColor = state.outlineColor;
     }
 }

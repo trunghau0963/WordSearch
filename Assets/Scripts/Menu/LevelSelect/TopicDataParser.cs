@@ -77,9 +77,11 @@ public static class TopicDataParser
             {
                 // Question line — extract the word (after last colon)
                 string questionText = line.TrimStart('-').Trim();
-                current.questions.Add(questionText);
 
                 string word = ExtractWord(questionText);
+                // Store question WITHOUT the answer so the player must guess
+                current.questions.Add(StripAnswer(questionText));
+
                 if (!string.IsNullOrEmpty(word) && !current.words.Contains(word.ToLower()))
                 {
                     current.words.Add(word.ToLower());
@@ -88,6 +90,23 @@ public static class TopicDataParser
         }
 
         return groups;
+    }
+
+    /// <summary>
+    /// Remove the answer portion from a question line (everything after the last colon
+    /// or inside parentheses) so the player only sees the description.
+    /// </summary>
+    private static string StripAnswer(string question)
+    {
+        // Remove parenthesized answer, e.g. "... (answer)" → "..."
+        string stripped = Regex.Replace(question, @"\s*\([^)]+\)\s*$", "").Trim();
+
+        // Remove answer after last colon, e.g. "description: answer" → "description"
+        int colonIndex = stripped.LastIndexOf(':');
+        if (colonIndex > 0)
+            stripped = stripped.Substring(0, colonIndex).TrimEnd();
+
+        return string.IsNullOrEmpty(stripped) ? question : stripped;
     }
 
     /// <summary>

@@ -68,8 +68,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 9fa396c1a4701c140894cb9a66ac38a4, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -151,10 +151,13 @@ MonoBehaviour:
   image: {fileID: 4668532771484678978}
   reactTransform: {fileID: 8963832165117251793}
   index: 0
-  normalColor: {r: 0.6150943, g: 0.6150943, b: 0.6150943, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0.20249653, a: 1}
+  normalColor: {r: 0.8352941, g: 0.91764706, b: 0.9046596, a: 1}
+  selectedColor: {r: 0.49371064, g: 1, b: 0.8630985, a: 1}
   wrongColor: {r: 0, g: 0, b: 0, a: 0}
   correctColor: {r: 0, g: 0, b: 0, a: 0}
+  liftScale: 1.15
+  liftDuration: 0.15
+  dropDuration: 0.15
 --- !u!1 &7561075561317321855
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,8 +225,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: A
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8a7da6cae76bf124e8dc154efe54d790, type: 2}
-  m_sharedMaterial: {fileID: -3479966147405583602, guid: 8a7da6cae76bf124e8dc154efe54d790, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -258,6 +261,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0

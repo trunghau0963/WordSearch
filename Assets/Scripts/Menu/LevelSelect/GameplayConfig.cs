@@ -26,6 +26,14 @@ public class GameplayConfig : ScriptableObject
     [Tooltip("Number of words for Level 3")]
     public int wordsPerLevel3 = 8;
 
+    [Header("Time Settings (seconds per level)")]
+    [Tooltip("Time in seconds for Level 1")]
+    public float timePerLevel1 = 120f;
+    [Tooltip("Time in seconds for Level 2")]
+    public float timePerLevel2 = 150f;
+    [Tooltip("Time in seconds for Level 3")]
+    public float timePerLevel3 = 180f;
+
     [Header("Grid Settings (if applicable)")]
     public int defaultGridRows = 10;
     public int defaultGridCols = 10;
@@ -41,6 +49,20 @@ public class GameplayConfig : ScriptableObject
             case 2: return wordsPerLevel2;
             case 3: return wordsPerLevel3;
             default: return wordsPerLevel2;
+        }
+    }
+
+    /// <summary>
+    /// Get the time limit (seconds) for a given level (1-3).
+    /// </summary>
+    public float GetTimeForLevel(int level)
+    {
+        switch (level)
+        {
+            case 1: return timePerLevel1;
+            case 2: return timePerLevel2;
+            case 3: return timePerLevel3;
+            default: return timePerLevel2;
         }
     }
 

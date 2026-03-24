@@ -175,4 +175,20 @@ public static class GameEvents
         OnResumeGame?.Invoke();
     }
 
+    // Fired after GameOver to reveal correct answers before showing the popup
+    public delegate void RevealAnswers();
+    public static event RevealAnswers OnRevealAnswers;
+    public static void RevealAnswersMethod()
+    {
+        OnRevealAnswers?.Invoke();
+    }
+
+    // Fired per unfound word during reveal — highlights squares without requiring prior selection
+    public delegate void RevealWord(string word, List<int> squareIdx);
+    public static event RevealWord OnRevealWord;
+    public static void RevealWordMethod(string word, List<int> squareIdx)
+    {
+        OnRevealWord?.Invoke(word, squareIdx);
+    }
+
 }

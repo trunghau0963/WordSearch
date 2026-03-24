@@ -21,5 +21,8 @@ MonoBehaviour:
   wordsPerLevel1: 1
   wordsPerLevel2: 1
   wordsPerLevel3: 1
+  timePerLevel1: 120
+  timePerLevel2: 150
+  timePerLevel3: 180
   defaultGridRows: 6
   defaultGridCols: 5

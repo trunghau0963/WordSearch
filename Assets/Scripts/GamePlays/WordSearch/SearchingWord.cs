@@ -27,11 +27,13 @@ public class SearchingWord : MonoBehaviour
     private void OnEnable()
     {
         GameEvents.OnCorrectWord += CorrectWord;
+        GameEvents.OnRevealWord += CorrectWord;
     }
 
     private void OnDisable()
     {
         GameEvents.OnCorrectWord -= CorrectWord;
+        GameEvents.OnRevealWord -= CorrectWord;
     }
 
     public void Setword(string word)

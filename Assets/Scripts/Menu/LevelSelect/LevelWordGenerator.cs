@@ -25,7 +25,8 @@ public static class LevelWordGenerator
             groupName = group.groupName,
             level = level,
             gridRows = config.defaultGridRows,
-            gridCols = config.defaultGridCols
+            gridCols = config.defaultGridCols,
+            timeInSeconds = config.GetTimeForLevel(level)
         };
 
         int targetWordCount = config.GetWordCountForLevel(level);

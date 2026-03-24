@@ -25,11 +25,25 @@ public class WordChecker : MonoBehaviour
 
     private List<int> _correctSquaresList = new();
 
+    // Same direction table as BoardGenerator (private there, duplicated here)
+    private static readonly Vector2Int[] Directions = new Vector2Int[]
+    {
+        new Vector2Int(1, 0),   // 0 right
+        new Vector2Int(-1, 0),  // 1 left
+        new Vector2Int(0, 1),   // 2 down
+        new Vector2Int(0, -1),  // 3 up
+        new Vector2Int(1, 1),   // 4 diagonal down-right
+        new Vector2Int(1, -1),  // 5 diagonal up-right
+        new Vector2Int(-1, 1),  // 6 diagonal down-left
+        new Vector2Int(-1, -1), // 7 diagonal up-left
+    };
+
     private void OnEnable()
     {
         GameEvents.OnCheckSquare += SquareSelected;
         GameEvents.OnClearSelection += ClearSelection;
         GameEvents.OnLoadNextBoard += LoadNextBoard;
+        GameEvents.OnRevealAnswers += RevealUnfoundWords;
     }
 
     private void OnDisable()
@@ -37,6 +51,7 @@ public class WordChecker : MonoBehaviour
         GameEvents.OnCheckSquare -= SquareSelected;
         GameEvents.OnClearSelection -= ClearSelection;
         GameEvents.OnLoadNextBoard -= LoadNextBoard;
+        GameEvents.OnRevealAnswers -= RevealUnfoundWords;
     }
 
     private void LoadNextBoard()
@@ -215,25 +230,7 @@ public class WordChecker : MonoBehaviour
                 if (holder != null && holder.CurrentData != null)
                 {
                     var current = holder.CurrentData;
-                    var allTopics = TopicDataParser.ParseFromResources();
-                    if (allTopics != null)
-                    {
-                        foreach (var t in allTopics)
-                        {
-                            if (t.topicName == current.topicName)
-                            {
-                                foreach (var g in t.groups)
-                                {
-                                    if (g.groupName == current.groupName)
-                                    {
-                                        hasNextLevel = current.level < g.levelCount;
-                                        break;
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }
+                    hasNextLevel = current.level < current.totalLevelsInGroup;
                 }
 
                 // isCompletedLevel = true means NO next level (only show return)
@@ -317,6 +314,27 @@ public class WordChecker : MonoBehaviour
                 GameEvents.SaveWordDictionaryMethod();
                 GameEvents.OnUnlockNextBoardMethod();
             }
+        }
+    }
+
+    private void RevealUnfoundWords()
+    {
+        var board = GameSessionData.CurrentBoard;
+        if (board == null) return;
+
+        foreach (var sw in board.SearchWords)
+        {
+            if (_foundWords.Contains(sw.Word)) continue;
+
+            var dir = Directions[sw.Direction];
+            var indices = new List<int>();
+            for (int i = 0; i < sw.Word.Length; i++)
+            {
+                int col = sw.Column + dir.x * i;
+                int row = sw.Row + dir.y * i;
+                indices.Add(col * board.Rows + row);
+            }
+            GameEvents.RevealWordMethod(sw.Word, indices);
         }
     }
 }
