@@ -28,6 +28,18 @@ public class BoardWD : MonoBehaviour
     public GameObject invalidWordText;
     public DictionaryDB dictionary = new DictionaryDB();
 
+    [Header("Animation")]
+    [SerializeField] private float flipDuration = 0.15f;
+    [SerializeField] private float flipStagger = 0.25f;
+    [SerializeField] private float typeBounceScale = 1.2f;
+    [SerializeField] private float typeBounceDuration = 0.08f;
+    [SerializeField] private float winBounceHeight = 20f;
+
+    // Level data
+    private List<WordEntry> _levelWords;
+    private int _currentWordIndex;
+    private bool _isSubmitting;
+
     // Start is called before the first frame update
     private void Awake()
     {
@@ -67,18 +79,17 @@ public class BoardWD : MonoBehaviour
 
     public void NewGame()
     {
-        Debug.Log("NewGame");
         ClearBoard();
         SetRandomWord();
-
         enabled = true;
+        AnimateBoardEntry();
     }
 
     public void TryAgain()
     {
-        Debug.Log("TryAgain");
         ClearBoard();
         enabled = true;
+        AnimateBoardEntry();
     }
 
     private void SetRandomWord()
@@ -89,13 +100,37 @@ public class BoardWD : MonoBehaviour
         } while (word.Length != 5);
         string meaning = dictionary.GetValue(word);
         word = word.ToLower().Trim();
-        ExplanationPrefab.GetComponent<ExplanationWord>().SetText(word, meaning);
+        if (ExplanationPrefab != null)
+        {
+            var exp = ExplanationPrefab.GetComponent<ExplanationWord>();
+            if (exp != null) exp.SetText(word, meaning);
+        }
         Debug.Log("Word: " + word);
+    }
+
+    /// <summary>
+    /// Board tiles pop-in animation with staggered delay.
+    /// </summary>
+    private void AnimateBoardEntry()
+    {
+        for (int r = 0; r < rows.Length; r++)
+        {
+            for (int c = 0; c < rows[r].tiles.Length; c++)
+            {
+                var tile = rows[r].tiles[c];
+                tile.transform.localScale = Vector3.zero;
+                float delay = r * 0.06f + c * 0.03f;
+                LeanTween.scale(tile.gameObject, Vector3.one, 0.25f)
+                    .setDelay(delay)
+                    .setEaseOutBack();
+            }
+        }
     }
 
     private void KeyPressCallback(string letter)
     {
-        Debug.Log("KeyPressCallback: " + letter);
+        if (_isSubmitting) return;
+
         Row currentRow = rows[rowIndex];
         if (letter == "Delete")
         {
@@ -112,98 +147,140 @@ public class BoardWD : MonoBehaviour
         {
             if (columnIndex >= currentRow.tiles.Length)
             {
-                // if (rowIndex < rows.Length)
-                // {
-                //     rowIndex++;
-                //     columnIndex = 0;
-                // }
-                // if (letter == "SUBMIT")
-                // {
-                // }
-                SubmitRow(currentRow);
-                return;
+                StartCoroutine(SubmitRowAnimated(currentRow));
             }
-            else
-            {
-                return;
-            }
-
+            return;
         }
-        if (rowIndex < rows.Length && columnIndex < rows[rowIndex].tiles.Length && letter != "Enter" && letter != "Delete")
+
+        if (rowIndex < rows.Length && columnIndex < rows[rowIndex].tiles.Length
+            && letter != "Enter" && letter != "Delete")
         {
-            currentRow.tiles[columnIndex].SetLetter(letter.ToString().ToUpper());
-            currentRow.tiles[columnIndex].SetState(occupiedState);
+            var tile = currentRow.tiles[columnIndex];
+            tile.SetLetter(letter.ToString().ToUpper());
+            tile.SetState(occupiedState);
             columnIndex++;
-            // Debug.Log("Letter set: " + letter);
+
+            // Type bounce animation
+            LeanTween.cancel(tile.gameObject);
+            tile.transform.localScale = Vector3.one;
+            LeanTween.scale(tile.gameObject, Vector3.one * typeBounceScale, typeBounceDuration)
+                .setEaseOutQuad()
+                .setOnComplete(() =>
+                {
+                    LeanTween.scale(tile.gameObject, Vector3.one, typeBounceDuration)
+                        .setEaseInQuad();
+                });
         }
     }
 
-    private void SubmitRow(Row row)
+    /// <summary>
+    /// Animated row submission: tiles flip one-by-one revealing color states.
+    /// </summary>
+    private IEnumerator SubmitRowAnimated(Row row)
     {
-        string remaining = word;
+        _isSubmitting = true;
 
-        Debug.Log("Word: " + word);
+        // Calculate states first
+        Tiles.State[] states = new Tiles.State[row.tiles.Length];
 
-        // Check correct/incorrect letters first
+        // Pass 1: correct positions
         for (int i = 0; i < row.tiles.Length; i++)
         {
-            Tiles tile = row.tiles[i];
-            string letter = tile.letter.ToLower();
-            if (letter == word[i].ToString())
-            {
-                tile.SetState(correctState);
-            }
-            else if (!word.Contains(letter))
-            {
-                tile.SetState(incorrectState);
-            }
+            string letter = row.tiles[i].letter.ToLower();
+            if (i < word.Length && letter == word[i].ToString())
+                states[i] = correctState;
         }
 
+        // Pass 2: wrong spot or incorrect
         for (int i = 0; i < row.tiles.Length; i++)
         {
-            Tiles tile = row.tiles[i];
-            if (tile.state != correctState && tile.state != incorrectState)
-            {
-                string letter = tile.letter.ToLower();
-                if (remaining.Contains(letter))
-                {
-                    tile.SetState(wrongSpotState);
-                    // int index = remaining.IndexOf(letter);
-                    // remaining = remaining.Remove(index, 1);
-                    // remaining = remaining.Insert(index, " ");
-                }
-                else
-                {
-                    tile.SetState(incorrectState);
-                }
-            }
+            if (states[i] == correctState) continue;
+            string letter = row.tiles[i].letter.ToLower();
+            if (word.Contains(letter))
+                states[i] = wrongSpotState;
+            else
+                states[i] = incorrectState;
         }
 
-        if (HasWon(row))
+        // Flip tiles one by one
+        for (int i = 0; i < row.tiles.Length; i++)
         {
-            enabled = false;
+            var tile = row.tiles[i];
+            var state = states[i];
+
+            // Flip down (scale Y → 0)
+            LeanTween.scaleY(tile.gameObject, 0f, flipDuration).setEaseInQuad();
+            yield return new WaitForSeconds(flipDuration);
+
+            // Apply color at midpoint
+            tile.SetState(state);
+
+            // Flip up (scale Y → 1)
+            LeanTween.scaleY(tile.gameObject, 1f, flipDuration).setEaseOutQuad();
+            yield return new WaitForSeconds(flipStagger);
         }
 
+        yield return new WaitForSeconds(0.2f);
+
+        bool won = HasWon(row);
         rowIndex++;
         columnIndex = 0;
+
+        if (won)
+        {
+            enabled = false;
+
+            // Win bounce animation on the winning row
+            for (int i = 0; i < row.tiles.Length; i++)
+            {
+                var tile = row.tiles[i];
+                float delay = i * 0.1f;
+                LeanTween.moveLocalY(tile.gameObject, tile.transform.localPosition.y + winBounceHeight, 0.2f)
+                    .setDelay(delay)
+                    .setEaseOutQuad()
+                    .setLoopPingPong(1);
+            }
+            yield return new WaitForSeconds(1f);
+
+            _isSubmitting = false;
+            bool isLastLevel = CheckIsLastLevel();
+            GameEvents.ShowPopupMethod(isLastLevel);
+            yield break;
+        }
 
         if (rowIndex >= rows.Length)
         {
             enabled = false;
+            _isSubmitting = false;
+            yield return new WaitForSeconds(0.5f);
+            GameEvents.GameOverlMethod();
+            yield break;
         }
+
+        _isSubmitting = false;
     }
 
-    private bool IsValidWord(string word)
+    private bool CheckIsLastLevel()
     {
-        for (int i = 0; i < validWords.Length; i++)
+        var holder = LevelPlayDataHolder.Instance;
+        if (holder == null || holder.CurrentData == null) return true;
+
+        var data = holder.CurrentData;
+        var allTopics = TopicDataParser.ParseFromResources();
+        foreach (var topic in allTopics)
         {
-            if (string.Equals(word, validWords[i], System.StringComparison.OrdinalIgnoreCase))
+            if (topic.topicName == data.topicName)
             {
-                return true;
+                foreach (var group in topic.groups)
+                {
+                    if (group.groupName == data.groupName)
+                    {
+                        return data.level >= group.levelCount;
+                    }
+                }
             }
         }
-
-        return false;
+        return true;
     }
 
     private bool HasWon(Row row)
@@ -236,15 +313,18 @@ public class BoardWD : MonoBehaviour
 
     private void OnEnable()
     {
-        tryAgainButton.interactable = false;
-        newWordButton.interactable = false;
+        if (tryAgainButton != null) tryAgainButton.interactable = false;
+        if (newWordButton != null) newWordButton.interactable = false;
     }
 
     private void OnDisable()
     {
-        tryAgainButton.interactable = true;
-        newWordButton.interactable = true;
+        if (tryAgainButton != null) tryAgainButton.interactable = true;
+        if (newWordButton != null) newWordButton.interactable = true;
     }
 
-
+    private void OnDestroy()
+    {
+        Key.OnKeyPressed -= KeyPressCallback;
+    }
 }

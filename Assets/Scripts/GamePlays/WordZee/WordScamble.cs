@@ -19,21 +19,21 @@ public class Word
 
     public string GetWord()
     {
-        if (desiredWord == null || desiredWord.Equals(""))
+        if (string.IsNullOrEmpty(desiredWord))
         {
             string result = word;
-            while (result == word)
+            int maxAttempts = 100;
+            while (result == word && maxAttempts-- > 0)
             {
                 result = "";
                 List<char> chars = new(word.ToCharArray());
                 while (chars.Count > 0)
                 {
-                    int index = UnityEngine.Random.Range(0, chars.Count - 1);
+                    int index = UnityEngine.Random.Range(0, chars.Count);
                     result += chars[index];
                     chars.RemoveAt(index);
                 }
             }
-
             return result;
         }
         else
@@ -56,49 +56,75 @@ public class WordScamble : MonoBehaviour
     public int currentWord;
     public static WordScamble main;
 
+    [Header("Animation")]
+    [SerializeField] private float spawnStagger = 0.08f;
+    [SerializeField] private float correctDelay = 0.8f;
+    [SerializeField] private float transitionDelay = 0.5f;
+
     DictionaryDB dictionaryDB = new DictionaryDB();
+    private bool _isChecking;
+    private bool _isTransitioning;
+
+    /// <summary> True when input should be blocked (during check/transition animations). </summary>
+    public bool IsInputBlocked => _isChecking || _isTransitioning;
 
     void Awake()
     {
         main = this;
     }
-    // Start is called before the first frame update
     void Start()
     {
-        if (VocabularyList.Instance != null)
+        // Priority 1: LevelPlayDataHolder (from level select menu)
+        var holder = LevelPlayDataHolder.Instance;
+        if (holder != null && holder.CurrentData != null && holder.CurrentData.words.Count > 0)
+        {
+            words = new List<Word>();
+            foreach (var entry in holder.CurrentData.words)
+            {
+                words.Add(new Word(entry.word, ""));
+            }
+        }
+        // Priority 2: VocabularyList (legacy / editor testing)
+        else if (VocabularyList.Instance != null)
         {
             dictionaryDB = VocabularyList.Instance.dictionaryDB;
             words = new List<Word>();
-            foreach (var word in dictionaryDB.keys)
+            foreach (var w in dictionaryDB.keys)
             {
-                words.Add(new Word(word, ""));
+                words.Add(new Word(w, ""));
             }
         }
-        ShowScrambleWord(currentWord);
+
+        if (words != null && words.Count > 0)
+        {
+            currentWord = 0;
+            ShowScrambleWord(0);
+        }
+        else
+        {
+            Debug.LogWarning("[WordScamble] No word data available.");
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // Add null check before accessing RectTransform
-
-        RepositionObject();
+        if (!_isTransitioning)
+            RepositionObject();
     }
+
     void RepositionObject()
     {
-        // for(int i = 0; i < charObjects.Count; i++){
-        //     charObjects[i].reactTransform.anchoredPosition = new Vector2(i * space, 0);
-        //     charObjects[i].index = i;
-        // }
         if (charObjects.Count > 0)
         {
-            float center = (charObjects.Count - 1) / 2;
-            print("Center: " + center);
+            float center = (charObjects.Count - 1) / 2f;
             for (int i = 0; i < charObjects.Count; i++)
             {
-                if (charObjects[i].reactTransform != null)
+                if (charObjects[i] != null && charObjects[i].reactTransform != null)
                 {
-                    charObjects[i].reactTransform.anchoredPosition = Vector2.Lerp(charObjects[i].reactTransform.anchoredPosition, new Vector2((i - center) * space, 0), lerpSpeed * Time.deltaTime);
+                    Vector2 target = new Vector2((i - center) * space, 0);
+                    charObjects[i].reactTransform.anchoredPosition = Vector2.Lerp(
+                        charObjects[i].reactTransform.anchoredPosition,
+                        target, lerpSpeed * Time.deltaTime);
                     charObjects[i].index = i;
                 }
             }
@@ -118,26 +144,37 @@ public class WordScamble : MonoBehaviour
         {
             Destroy(item.gameObject);
         }
+
         if (index >= words.Count)
         {
-            Debug.LogError("Index out of range");
+            // All words completed → fire win event
+            bool isLastLevel = CheckIsLastLevel();
+            GameEvents.ShowPopupMethod(isLastLevel);
             return;
         }
-        string word = words[index].GetWord();
-        for (int i = 0; i < word.Length; i++)
+
+        string scrambled = words[index].GetWord();
+        for (int i = 0; i < scrambled.Length; i++)
         {
             CharObj clone = Instantiate(charPrefab, container);
-            clone.SetChar(word[i]);
+            clone.SetChar(scrambled[i]);
             charObjects.Add(clone);
-            string temp = clone.ShowActive();
-            print(i + " " + temp);
+
+            // Spawn pop-in animation
+            clone.transform.localScale = Vector3.zero;
+            LeanTween.scale(clone.gameObject, Vector3.one, 0.3f)
+                .setDelay(i * spawnStagger)
+                .setEaseOutBack();
         }
-        currentWord = index;
-        RepositionObject();
+
+        _isChecking = false;
+        _isTransitioning = false;
     }
 
     public void Swap(int indexA, int indexB)
     {
+        if (_isChecking || _isTransitioning) return;
+
         (charObjects[indexB], charObjects[indexA]) = (charObjects[indexA], charObjects[indexB]);
         charObjects[indexA].transform.SetSiblingIndex(indexB);
         charObjects[indexB].transform.SetSiblingIndex(indexA);
@@ -147,6 +184,8 @@ public class WordScamble : MonoBehaviour
 
     public void Select(CharObj charObj)
     {
+        if (_isChecking || _isTransitioning) return;
+
         if (firstSelected)
         {
             Swap(firstSelected.index, charObj.index);
@@ -156,6 +195,7 @@ public class WordScamble : MonoBehaviour
         else
         {
             firstSelected = charObj;
+            charObj.AnimateSelect();
         }
     }
 
@@ -166,24 +206,68 @@ public class WordScamble : MonoBehaviour
 
     public void CheckWord()
     {
-        StartCoroutine(CoCheckWord());
+        if (!_isChecking)
+            StartCoroutine(CoCheckWord());
     }
 
     IEnumerator CoCheckWord()
     {
-        yield return new WaitForSeconds(1);
-        CheckWord();
+        _isChecking = true;
+        yield return new WaitForSeconds(0.5f);
 
-              string current = "";
+        string current = "";
         foreach (CharObj charObj in charObjects)
         {
             current += charObj.charName;
         }
+
         if (current == words[currentWord].word)
         {
+            _isTransitioning = true;
+
+            // Correct! Celebrate each letter with stagger
+            for (int i = 0; i < charObjects.Count; i++)
+            {
+                charObjects[i].AnimateCorrect(i * 0.1f);
+            }
+            yield return new WaitForSeconds(correctDelay);
+
+            // Fade out current word
+            for (int i = 0; i < charObjects.Count; i++)
+            {
+                LeanTween.scale(charObjects[i].gameObject, Vector3.zero, 0.2f)
+                    .setDelay(i * 0.05f)
+                    .setEaseInBack();
+            }
+            yield return new WaitForSeconds(transitionDelay);
+
             currentWord++;
             ShowScrambleWord(currentWord);
         }
+
+        _isChecking = false;
     }
 
+    private bool CheckIsLastLevel()
+    {
+        var holder = LevelPlayDataHolder.Instance;
+        if (holder == null || holder.CurrentData == null) return true;
+
+        var data = holder.CurrentData;
+        var allTopics = TopicDataParser.ParseFromResources();
+        foreach (var topic in allTopics)
+        {
+            if (topic.topicName == data.topicName)
+            {
+                foreach (var group in topic.groups)
+                {
+                    if (group.groupName == data.groupName)
+                    {
+                        return data.level >= group.levelCount;
+                    }
+                }
+            }
+        }
+        return true;
+    }
 }
