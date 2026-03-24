@@ -20,6 +20,7 @@ public class MainMenu : Panel
     [SerializeField] private Button renameButton = null;
     [SerializeField] private Button customizationButton = null;
     [SerializeField] private Button lobbyButton = null;
+    [SerializeField] private Button vocabularyButton = null;
     
     [Header("Play Game / GamePlay Panel")]
     [SerializeField] private Button playGameButton = null;
@@ -63,6 +64,7 @@ public class MainMenu : Panel
         renameButton.onClick.AddListener(RenamePlayer);
         customizationButton.onClick.AddListener(Customization);
         lobbyButton.onClick.AddListener(Lobby);
+        if (vocabularyButton != null) vocabularyButton.onClick.AddListener(Vocabulary);
         playGameButton.onClick.AddListener(ToggleGamePlay);
 
         // Gameplay buttons → open level select
@@ -321,6 +323,17 @@ public class MainMenu : Panel
     private void Customization()
     {
         PanelManager.Open("customization");
+    }
+
+    private void Vocabulary()
+    {
+        // Ensure VocabularyList singleton exists before opening menu
+        if (VocabularyList.Instance == null)
+        {
+            var go = new GameObject("VocabularyList");
+            go.AddComponent<VocabularyList>();
+        }
+        PanelManager.Open("vocabulary");
     }
     
     private async void InitializeFriendsServiceAsync()

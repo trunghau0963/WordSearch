@@ -7,7 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class WordChecker : MonoBehaviour
 {
-    public GameData currentGameData;
+    [Header("Legacy (only for ScriptableObject board flow)")]
+    [SerializeField] private GameData legacyGameData;
 
     private GameDataSelector gameDataSelector;
 
@@ -41,7 +42,7 @@ public class WordChecker : MonoBehaviour
 
     private void LoadNextBoard()
     {
-        SceneManager.LoadScene("WordSearchGameScene");
+        SceneManager.LoadScene("WordSearch");
     }
 
     void Start()
@@ -114,7 +115,7 @@ public class WordChecker : MonoBehaviour
 
     private void CheckWord()
     {
-        foreach (var word in currentGameData.selectedBoardData.SearchWords)
+        foreach (var word in GameSessionData.CurrentBoard.SearchWords)
         {
             if (word.Word == _word)
             {
@@ -198,23 +199,62 @@ public class WordChecker : MonoBehaviour
 
     private void CheckBoardComplete()
     {
-        bool loadNextBoard = false;
-        if (currentGameData.selectedBoardData.SearchWords.Count == _completedWords)
+        if (GameSessionData.CurrentBoard.SearchWords.Count == _completedWords)
         {
-            Section_PlayerPrefs section = currentGameData.selectedSection;
-            Level_PlayerPrefs level = currentGameData.selectedLevel;
-
-            int totalBoardCount = level.boardList.Count;
-
-            if (level == null)
+            // Dynamic board (from LevelPlayDataHolder) — check if next level exists
+            if (GameSessionData.CurrentBoard.Name == "Generated")
             {
+                Debug.Log("Board complete (dynamic)");
+                GameEvents.BoardCompleteMethod();
+                GameEvents.SaveWordDictionaryMethod();
+
+                // Determine if there's a next level
+                bool hasNextLevel = false;
+                var holder = LevelPlayDataHolder.Instance;
+                if (holder != null && holder.CurrentData != null)
+                {
+                    var current = holder.CurrentData;
+                    var allTopics = TopicDataParser.ParseFromResources();
+                    if (allTopics != null)
+                    {
+                        foreach (var t in allTopics)
+                        {
+                            if (t.topicName == current.topicName)
+                            {
+                                foreach (var g in t.groups)
+                                {
+                                    if (g.groupName == current.groupName)
+                                    {
+                                        hasNextLevel = current.level < g.levelCount;
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // isCompletedLevel = true means NO next level (only show return)
+                // isCompletedLevel = false means there IS a next level (show both buttons)
+                GameEvents.ShowPopupMethod(!hasNextLevel);
                 return;
             }
+
+            // Legacy ScriptableObject flow — multi-board progression
+            bool loadNextBoard = false;
+            Section_PlayerPrefs section = legacyGameData.selectedSection;
+            Level_PlayerPrefs level = legacyGameData.selectedLevel;
+
+            if (level == null) return;
+
+            int totalBoardCount = level.boardList.Count;
             int currentBoardIndex = 0;
+
             for (int i = 0; i < totalBoardCount; i++)
             {
                 BoardData board = level.boardList[i];
-                if (currentGameData.selectedBoardData == board)
+                if (GameSessionData.CurrentBoard == board)
                 {
                     currentBoardIndex = i;
                     int nextBoardIndex = i + 1;
@@ -224,7 +264,7 @@ public class WordChecker : MonoBehaviour
                     level.SetScore(currentScore + score);
                     if (nextBoardIndex < totalBoardCount)
                     {
-                        currentGameData.selectedBoardData = level.boardList[nextBoardIndex];
+                        GameSessionData.CurrentBoard = level.boardList[nextBoardIndex];
                         level.boardList[nextBoardIndex].index = nextBoardIndex;
                         loadNextBoard = true;
                     }
@@ -242,7 +282,7 @@ public class WordChecker : MonoBehaviour
                 int currentLevelIndex = 0;
                 for (int i = 0; i < section.GetLevels().Count; i++)
                 {
-                    if (section.GetLevel(i).Name == currentGameData.selectedLevel.Name)
+                    if (section.GetLevel(i).Name == legacyGameData.selectedLevel.Name)
                     {
                         currentLevelIndex = i;
                         break;
@@ -259,7 +299,7 @@ public class WordChecker : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Section complete and Show popup event"); 
+                    Debug.Log("Section complete and Show popup event");
                     GameEvents.ShowPopupMethod(true);
                     GameEvents.SaveWordDictionaryMethod();
                 }

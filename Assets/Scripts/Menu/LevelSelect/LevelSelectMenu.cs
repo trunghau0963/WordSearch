@@ -25,7 +25,11 @@ public class LevelSelectMenu : Panel
     [SerializeField] private Color topicColor = new Color(0.2f, 0.6f, 0.2f, 1f);
     [SerializeField] private Color groupColor = new Color(0.18f, 0.5f, 0.72f, 1f);
     [SerializeField] private Color levelColor = new Color(0.85f, 0.55f, 0.13f, 1f);
+    [SerializeField] private Color completedColor = new Color(0.3f, 0.8f, 0.3f, 1f);
     [SerializeField] private Color disabledColor = new Color(0.45f, 0.45f, 0.45f, 1f);
+
+    [Header("Completed Indicator")]
+    [SerializeField] private string completedSuffix = " ✓";
 
     [Header("Scene Transition")]
     [SerializeField] private string transitionName = "CrossWipe";
@@ -83,7 +87,11 @@ public class LevelSelectMenu : Panel
 
         foreach (var topic in _topics)
         {
-            CreateItem(topic.topicName, topicColor, () => OnTopicClicked(topic));
+            bool done = PlayHistory.Instance != null &&
+                        PlayHistory.Instance.IsTopicCompleted(_currentConfig.gameplayId, topic.topicName);
+            Color color = done ? completedColor : topicColor;
+            string label = topic.topicName + (done ? completedSuffix : "");
+            CreateItem(label, color, () => OnTopicClicked(topic));
         }
     }
 
@@ -96,11 +104,18 @@ public class LevelSelectMenu : Panel
 
         foreach (var group in topic.groups)
         {
-            // Check how many compatible words exist
             int compatibleCount = CountCompatibleWords(group);
             bool hasWords = compatibleCount > 0;
-            Color color = hasWords ? groupColor : disabledColor;
-            string label = group.groupName + (hasWords ? $" ({compatibleCount} words)" : " (no compatible words)");
+
+            bool done = hasWords && PlayHistory.Instance != null &&
+                        PlayHistory.Instance.IsGroupCompleted(
+                            _currentConfig.gameplayId, topic.topicName, group.groupName);
+
+            Color color = !hasWords ? disabledColor : (done ? completedColor : groupColor);
+            string label = group.groupName;
+            if (done) label += completedSuffix;
+            else if (hasWords) label += $" ({compatibleCount} words)";
+            else label += " (no compatible words)";
 
             CreateItem(label, color, hasWords ? () => OnGroupClicked(group) : (Action)null, !hasWords);
         }
@@ -119,8 +134,15 @@ public class LevelSelectMenu : Panel
             int wordCount = _currentConfig.GetWordCountForLevel(level);
             int available = CountCompatibleWords(group);
             int actual = Mathf.Min(wordCount, available);
-            string label = $"Level {level}  ({actual} words)";
-            CreateItem(label, levelColor, () => OnLevelClicked(level));
+
+            bool done = PlayHistory.Instance != null &&
+                        PlayHistory.Instance.IsLevelCompleted(
+                            _currentConfig.gameplayId, _selectedTopic.topicName,
+                            group.groupName, level);
+
+            Color color = done ? completedColor : levelColor;
+            string label = $"Level {level}  ({actual} words)" + (done ? completedSuffix : "");
+            CreateItem(label, color, () => OnLevelClicked(level));
         }
     }
 

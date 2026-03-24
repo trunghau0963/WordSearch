@@ -7,8 +7,6 @@ using UnityEngine.UI;
 
 public class CountDownTimer : MonoBehaviour
 {
-    public GameData currentGameData;
-
     public TMP_Text timerText;
 
     private float _timeLeft;
@@ -21,13 +19,15 @@ public class CountDownTimer : MonoBehaviour
 
     void Start()
     {
-        _timeLeft = currentGameData.selectedBoardData.timeInSeconds;
+        _timeLeft = GameSessionData.CurrentBoard != null ? GameSessionData.CurrentBoard.timeInSeconds : 120f;
         _oneSecondDown = _timeLeft - 1f;
         _timeOut = false;
         _stopTimer = false;
 
         GameEvents.OnBoardComplete += StopTimer;
         GameEvents.OnUnlockNextBoard += StopTimer;
+        GameEvents.OnPauseGame += PauseTimer;
+        GameEvents.OnResumeGame += ResumeTimer;
 
     }
 
@@ -47,11 +47,24 @@ public class CountDownTimer : MonoBehaviour
     {
         GameEvents.OnBoardComplete -= StopTimer;
         GameEvents.OnUnlockNextBoard -= StopTimer;
+        GameEvents.OnPauseGame -= PauseTimer;
+        GameEvents.OnResumeGame -= ResumeTimer;
     }
 
     public void StopTimer()
     {
         _stopTimer = true;
+    }
+
+    private void PauseTimer()
+    {
+        _stopTimer = true;
+    }
+
+    private void ResumeTimer()
+    {
+        if (!_timeOut)
+            _stopTimer = false;
     }
 
     void OnGUI()

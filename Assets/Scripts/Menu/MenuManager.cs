@@ -9,7 +9,7 @@ public class MenuManager : MonoBehaviour
 {
     
     private bool initialized = false;
-    private bool eventsInitialized = false;
+    private static bool eventsInitialized = false;
     
     private static MenuManager singleton = null;
 
@@ -64,7 +64,12 @@ public class MenuManager : MonoBehaviour
                 SetupEvents();
             }
 
-            if (AuthenticationService.Instance.SessionTokenExists)
+            if (AuthenticationService.Instance.IsSignedIn)
+            {
+                // Already signed in — go straight to main menu
+                SignInConfirmAsync();
+            }
+            else if (AuthenticationService.Instance.SessionTokenExists)
             {
                 SignInAnonymouslyAsync();
             }

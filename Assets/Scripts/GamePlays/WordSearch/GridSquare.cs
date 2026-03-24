@@ -17,6 +17,18 @@ public class GridSquare : MonoBehaviour
     public int _index = -1;
     public bool _correct;
 
+    // Animation settings
+    private static readonly float SelectPunchScale = 0.15f;
+    private static readonly float SelectAnimDuration = 0.15f;
+    private static readonly float CorrectPunchScale = 0.25f;
+    private static readonly float CorrectAnimDuration = 0.35f;
+    private static readonly float ShakeIntensity = 0.08f;
+    private static readonly float ShakeDuration = 0.3f;
+
+    private Vector3 _originalScale;
+    private Vector3 _originalPosition;
+    private static bool _gamePaused;
+
     public void SetIndex(int index)
     {
         _index = index;
@@ -33,6 +45,7 @@ public class GridSquare : MonoBehaviour
         _selected = false;
         _correct = false;
         _displayedImage = GetComponent<SpriteRenderer>();
+        _originalPosition = transform.localPosition;
     }
 
     private void OnEnable()
@@ -41,6 +54,9 @@ public class GridSquare : MonoBehaviour
         GameEvents.OnDisableSquareSelection += OnDisableSquareSelection;
         GameEvents.OnSelectSquare += SelectSquare;
         GameEvents.OnCorrectWord += CorrectWord;
+        GameEvents.OnClearSelection += OnWrongSelection;
+        GameEvents.OnPauseGame += OnPauseGame;
+        GameEvents.OnResumeGame += OnResumeGame;
     }
 
     private void OnDisable()
@@ -49,7 +65,13 @@ public class GridSquare : MonoBehaviour
         GameEvents.OnDisableSquareSelection -= OnDisableSquareSelection;
         GameEvents.OnSelectSquare -= SelectSquare;
         GameEvents.OnCorrectWord -= CorrectWord;
+        GameEvents.OnClearSelection -= OnWrongSelection;
+        GameEvents.OnPauseGame -= OnPauseGame;
+        GameEvents.OnResumeGame -= OnResumeGame;
     }
+
+    private void OnPauseGame() { _gamePaused = true; }
+    private void OnResumeGame() { _gamePaused = false; }
 
     public void CorrectWord(string word, List<int> squareIdx)
     {
@@ -57,6 +79,7 @@ public class GridSquare : MonoBehaviour
         {
             _correct = true;
             _displayedImage.sprite = _correctLetterData.Image;
+            PlayCorrectAnimation();
         }
 
         _selected = false;
@@ -73,7 +96,7 @@ public class GridSquare : MonoBehaviour
     {
         _clicked = false;
         _selected = false;
-        if (_correct == true)
+        if (_correct)
         {
             _displayedImage.sprite = _correctLetterData.Image;
         }
@@ -83,14 +106,16 @@ public class GridSquare : MonoBehaviour
         }
     }
 
-    private void SelectSquare(UnityEngine.Vector3 position)
+    private void SelectSquare(Vector3 position)
     {
         if (this.gameObject.transform.position == position)
         {
             _displayedImage.sprite = _selectedLetterData.Image;
+            PlaySelectAnimation();
         }
     }
-    public void SetSprite(AlphabetData.LetterData normalLetterData, AlphabetData.LetterData selectedLetterData, 
+
+    public void SetSprite(AlphabetData.LetterData normalLetterData, AlphabetData.LetterData selectedLetterData,
         AlphabetData.LetterData correctLetterData)
     {
         _normalLetterData = normalLetterData;
@@ -98,34 +123,102 @@ public class GridSquare : MonoBehaviour
         _correctLetterData = correctLetterData;
 
         GetComponent<SpriteRenderer>().sprite = _normalLetterData.Image;
-
     }
 
     private void OnMouseDown()
     {
+        if (_gamePaused) return;
         OnEnableSquareSelection();
         GameEvents.EnableSquareSelectionMethod();
         CheckSquare();
         _displayedImage.sprite = _selectedLetterData.Image;
+        PlaySelectAnimation();
     }
 
     private void OnMouseEnter()
     {
+        if (_gamePaused) return;
         CheckSquare();
     }
 
     private void OnMouseUp()
     {
+        if (_gamePaused) return;
         GameEvents.ClearSelectionMethod();
         GameEvents.DisableSquareSelectionMethod();
     }
 
     public void CheckSquare()
     {
-        if (_clicked == true && _selected == false)
+        if (_clicked && !_selected)
         {
             _selected = true;
             GameEvents.CheckSquareMethod(_normalLetterData.Letter, gameObject.transform.position, _index);
         }
+    }
+
+    // --- Animations ---
+
+    private void PlaySelectAnimation()
+    {
+        LeanTween.cancel(gameObject);
+        LeanTween.scale(gameObject, transform.localScale * (1f + SelectPunchScale), SelectAnimDuration * 0.5f)
+            .setEase(LeanTweenType.easeOutQuad)
+            .setOnComplete(() =>
+            {
+                LeanTween.scale(gameObject, transform.localScale / (1f + SelectPunchScale), SelectAnimDuration * 0.5f)
+                    .setEase(LeanTweenType.easeInQuad);
+            });
+    }
+
+    private void PlayCorrectAnimation()
+    {
+        LeanTween.cancel(gameObject);
+        var targetScale = transform.localScale;
+
+        // Punch scale up then back
+        LeanTween.scale(gameObject, targetScale * (1f + CorrectPunchScale), CorrectAnimDuration * 0.4f)
+            .setEase(LeanTweenType.easeOutBack)
+            .setOnComplete(() =>
+            {
+                LeanTween.scale(gameObject, targetScale, CorrectAnimDuration * 0.6f)
+                    .setEase(LeanTweenType.easeOutBounce);
+            });
+    }
+
+    private void OnWrongSelection()
+    {
+        // Only shake squares that were selected but not correct
+        if (_selected && !_correct)
+        {
+            PlayShakeAnimation();
+            TryVibrate();
+        }
+    }
+
+    private void PlayShakeAnimation()
+    {
+        LeanTween.cancel(gameObject);
+        var startPos = transform.localPosition;
+
+        LeanTween.value(gameObject, 0f, 1f, ShakeDuration)
+            .setOnUpdate((float t) =>
+            {
+                float decay = 1f - t;
+                float offsetX = Mathf.Sin(t * Mathf.PI * 8f) * ShakeIntensity * decay;
+                transform.localPosition = startPos + new Vector3(offsetX, 0f, 0f);
+            })
+            .setOnComplete(() =>
+            {
+                transform.localPosition = startPos;
+            })
+            .setEase(LeanTweenType.linear);
+    }
+
+    private void TryVibrate()
+    {
+#if UNITY_ANDROID && !UNITY_EDITOR
+        Handheld.Vibrate();
+#endif
     }
 }

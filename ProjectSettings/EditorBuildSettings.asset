@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/OldScene/IntroScene.unity
     guid: 86163fee0d5f5b344b87538a744f4014
   - enabled: 0
-    path: Assets/Scenes/MainMenu.unity
+    path: Assets/Scenes/MainMenuOld.unity
     guid: dcdbedbc69e842846835dd28526f20be
   - enabled: 1
     path: Assets/Scenes/WordSearch.unity
@@ -33,7 +33,7 @@ EditorBuildSettings:
     path: Assets/OldScene/IAP.unity
     guid: 12b5f248f9452804581a0f0df3d887d0
   - enabled: 1
-    path: Assets/Scenes/MAINMENU2026.unity
+    path: Assets/Scenes/MainMenu.unity
     guid: faa3fc77daf79134797595e80177b5e3
   m_configObjects:
     com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000, guid: b489386dcf8ccb34ab409478701d5748, type: 2}

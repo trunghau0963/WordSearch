@@ -15,7 +15,7 @@ public class LevelButton : MonoBehaviour
     public Button button;
     public Text Name;
     public GameData gameData;
-    private string gameSceneName = "WordSearchGameScene";
+    private string gameSceneName = "WordSearch";
 
     Level_PlayerPrefs level;
 

@@ -161,4 +161,18 @@ public static class GameEvents
         }
     }
 
+    public delegate void PauseGame();
+    public static event PauseGame OnPauseGame;
+    public static void PauseGameMethod()
+    {
+        OnPauseGame?.Invoke();
+    }
+
+    public delegate void ResumeGame();
+    public static event ResumeGame OnResumeGame;
+    public static void ResumeGameMethod()
+    {
+        OnResumeGame?.Invoke();
+    }
+
 }
