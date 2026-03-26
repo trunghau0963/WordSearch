@@ -309,23 +309,29 @@ public class SavingFile : MonoBehaviour
     public GameDataSave LoadData()
     {
         string file = nameFile + ".json";
-        string filePath = Path.Combine(Application.dataPath,"Resources", file);
         GameDataSave data = new GameDataSave();
 
-        if (File.Exists(filePath))
+        // Try persistent data first (user's saved copy)
+        string persistentPath = Path.Combine(Application.persistentDataPath, file);
+        if (File.Exists(persistentPath))
         {
-            string json = File.ReadAllText(filePath);
+            string json = File.ReadAllText(persistentPath);
             data = JsonUtility.FromJson<GameDataSave>(json);
-            // Debug.Log("Data Loaded");
+            Debug.Log("Data Loaded from: " + persistentPath);
+            return data;
+        }
+
+        // Fallback to Resources (bundled data) — Android compatible
+        TextAsset textAsset = Resources.Load<TextAsset>(nameFile);
+        if (textAsset != null)
+        {
+            data = JsonUtility.FromJson<GameDataSave>(textAsset.text);
+            Debug.Log("Data Loaded from Resources: " + nameFile);
         }
         else
         {
-            // GameDataSave data = new GameDataSave();
-            // data.DataSet = new List<Category>();
             Debug.Log("No Data Found");
         }
-
-        Debug.Log("Data Saved to: " + filePath);
 
         return data;
     }
@@ -333,23 +339,29 @@ public class SavingFile : MonoBehaviour
     public GameDataSave LoadData(string nameFile)
     {
         string file = nameFile + ".json";
-        string filePath = Path.Combine(Application.dataPath,"Resources", file);
         GameDataSave data = new GameDataSave();
 
-        if (File.Exists(filePath))
+        // Try persistent data first (user's saved copy)
+        string persistentPath = Path.Combine(Application.persistentDataPath, file);
+        if (File.Exists(persistentPath))
         {
-            string json = File.ReadAllText(filePath);
+            string json = File.ReadAllText(persistentPath);
             data = JsonUtility.FromJson<GameDataSave>(json);
-            // Debug.Log("Data Loaded");
+            Debug.Log("Data Loaded from: " + persistentPath);
+            return data;
+        }
+
+        // Fallback to Resources (bundled data) — Android compatible
+        TextAsset textAsset = Resources.Load<TextAsset>(nameFile);
+        if (textAsset != null)
+        {
+            data = JsonUtility.FromJson<GameDataSave>(textAsset.text);
+            Debug.Log("Data Loaded from Resources: " + nameFile);
         }
         else
         {
-            // GameDataSave data = new GameDataSave();
-            // data.DataSet = new List<Category>();
             Debug.Log("No Data Found");
         }
-
-        Debug.Log("Data Loaded from: " + filePath);
 
         return data;
     }
@@ -358,9 +370,9 @@ public class SavingFile : MonoBehaviour
     public void SaveData()
     {
         string file = nameFile + ".json";
-        string filePath = Path.Combine(Application.dataPath, "Resources", file);
+        string filePath = Path.Combine(Application.persistentDataPath, file);
 
-        string json = JsonUtility.ToJson(data);  // true for pretty-printing the JSON
+        string json = JsonUtility.ToJson(data);
         File.WriteAllText(filePath, json);
 
         Debug.Log("Data Saved to: " + filePath);
@@ -369,9 +381,9 @@ public class SavingFile : MonoBehaviour
     public void SaveData(string nameFile)
     {
         string file = nameFile + ".json";
-        string filePath = Path.Combine(Application.dataPath,"Resources", file);
+        string filePath = Path.Combine(Application.persistentDataPath, file);
 
-        string json = JsonUtility.ToJson(data);  // true for pretty-printing the JSON
+        string json = JsonUtility.ToJson(data);
         File.WriteAllText(filePath, json);
 
         Debug.Log("Data Saved to: " + filePath);
@@ -379,17 +391,35 @@ public class SavingFile : MonoBehaviour
 
     public ScoreData LoadScoreFromJson()
     {
-        string filePath = Path.Combine(Application.dataPath,"Resources", fileScore);
-        if (File.Exists(filePath))
+        // Try persistent data first (user's saved copy)
+        string persistentPath = Path.Combine(Application.persistentDataPath, fileScore);
+        if (File.Exists(persistentPath))
         {
             try
             {
-                string json = File.ReadAllText(filePath);
+                string json = File.ReadAllText(persistentPath);
                 score = JsonUtility.FromJson<ScoreData>(json);
             }
             catch (IOException e)
             {
                 Debug.LogError("Error reading score file: " + e.Message);
+            }
+            return new ScoreData { score = score.score };
+        }
+
+        // Fallback to Resources (bundled data) — Android compatible
+        string scoreFileName = Path.GetFileNameWithoutExtension(fileScore);
+        TextAsset textAsset = Resources.Load<TextAsset>(scoreFileName);
+        if (textAsset != null)
+        {
+            try
+            {
+                score = JsonUtility.FromJson<ScoreData>(textAsset.text);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("Error parsing score from Resources: " + e.Message);
+                score.score = 0;
             }
         }
         else
@@ -403,7 +433,6 @@ public class SavingFile : MonoBehaviour
     public void SaveScoreToJson()
     {
         int totalScore = 0;
-        string filePath = Path.Combine(Application.dataPath,"Resources", fileScore);
         foreach (Category category in data.DataSet)
         {
             foreach (Section section in category.Sections)
@@ -417,10 +446,11 @@ public class SavingFile : MonoBehaviour
         score.score = totalScore;
         ScoreData scoreData = new ScoreData { score = totalScore };
         string json = JsonUtility.ToJson(scoreData);
+        string savePath = Path.Combine(Application.persistentDataPath, fileScore);
         try
         {
-            File.WriteAllText(filePath, json);
-            Debug.Log("Score Saved on path " + filePath);
+            File.WriteAllText(savePath, json);
+            Debug.Log("Score Saved on path " + savePath);
         }
         catch (IOException e)
         {

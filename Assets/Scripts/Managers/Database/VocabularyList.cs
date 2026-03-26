@@ -58,6 +58,7 @@ public class VocabularyList : MonoBehaviour
 
         _wordSet.Add(key);
         dictionaryDB.Add(key, explanation);
+        Save(); // Save immediately for Android reliability (OnApplicationQuit not guaranteed)
     }
 
     public void RemoveWord(string word)
@@ -67,6 +68,7 @@ public class VocabularyList : MonoBehaviour
 
         _wordSet.Remove(key);
         dictionaryDB.Remove(key);
+        Save(); // Save immediately for Android reliability
     }
 
     public bool ContainsWord(string word)
@@ -129,12 +131,11 @@ public class VocabularyList : MonoBehaviour
             return JsonUtility.FromJson<DictionaryDB>(json);
         }
 
-        // Fallback to Resources (initial data)
-        string resourcesPath = Path.Combine(Application.dataPath, "Resources", "Dictionary.json");
-        if (File.Exists(resourcesPath))
+        // Fallback to Resources (initial data) — use Resources.Load for Android compatibility
+        TextAsset textAsset = Resources.Load<TextAsset>("Dictionary");
+        if (textAsset != null)
         {
-            string json = File.ReadAllText(resourcesPath);
-            return JsonUtility.FromJson<DictionaryDB>(json);
+            return JsonUtility.FromJson<DictionaryDB>(textAsset.text);
         }
 
         Debug.Log("[VocabularyList] No dictionary file found, starting fresh.");

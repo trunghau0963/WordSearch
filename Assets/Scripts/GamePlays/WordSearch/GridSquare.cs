@@ -29,6 +29,13 @@ public class GridSquare : MonoBehaviour
     private Vector3 _originalPosition;
     private static bool _gamePaused;
 
+    private void ResetTransform()
+    {
+        if (_originalScale != Vector3.zero)
+            transform.localScale = _originalScale;
+        transform.localPosition = _originalPosition;
+    }
+
     public void SetIndex(int index)
     {
         _index = index;
@@ -112,6 +119,8 @@ public class GridSquare : MonoBehaviour
     {
         if (this.gameObject.transform.position == position)
         {
+            if (_originalScale == Vector3.zero)
+                _originalScale = transform.localScale;
             _displayedImage.sprite = _selectedLetterData.Image;
             PlaySelectAnimation();
         }
@@ -130,6 +139,9 @@ public class GridSquare : MonoBehaviour
     private void OnMouseDown()
     {
         if (_gamePaused) return;
+        // Capture stable scale on first interaction (spawn animation is done by now)
+        if (_originalScale == Vector3.zero)
+            _originalScale = transform.localScale;
         OnEnableSquareSelection();
         GameEvents.EnableSquareSelectionMethod();
         CheckSquare();
@@ -164,11 +176,14 @@ public class GridSquare : MonoBehaviour
     private void PlaySelectAnimation()
     {
         LeanTween.cancel(gameObject);
-        LeanTween.scale(gameObject, transform.localScale * (1f + SelectPunchScale), SelectAnimDuration * 0.5f)
+        ResetTransform();
+
+        Vector3 baseScale = _originalScale != Vector3.zero ? _originalScale : transform.localScale;
+        LeanTween.scale(gameObject, baseScale * (1f + SelectPunchScale), SelectAnimDuration * 0.5f)
             .setEase(LeanTweenType.easeOutQuad)
             .setOnComplete(() =>
             {
-                LeanTween.scale(gameObject, transform.localScale / (1f + SelectPunchScale), SelectAnimDuration * 0.5f)
+                LeanTween.scale(gameObject, baseScale, SelectAnimDuration * 0.5f)
                     .setEase(LeanTweenType.easeInQuad);
             });
     }
@@ -176,14 +191,15 @@ public class GridSquare : MonoBehaviour
     private void PlayCorrectAnimation()
     {
         LeanTween.cancel(gameObject);
-        var targetScale = transform.localScale;
+        ResetTransform();
 
-        // Punch scale up then back
-        LeanTween.scale(gameObject, targetScale * (1f + CorrectPunchScale), CorrectAnimDuration * 0.4f)
+        Vector3 baseScale = _originalScale != Vector3.zero ? _originalScale : transform.localScale;
+
+        LeanTween.scale(gameObject, baseScale * (1f + CorrectPunchScale), CorrectAnimDuration * 0.4f)
             .setEase(LeanTweenType.easeOutBack)
             .setOnComplete(() =>
             {
-                LeanTween.scale(gameObject, targetScale, CorrectAnimDuration * 0.6f)
+                LeanTween.scale(gameObject, baseScale, CorrectAnimDuration * 0.6f)
                     .setEase(LeanTweenType.easeOutBounce);
             });
     }
@@ -201,18 +217,18 @@ public class GridSquare : MonoBehaviour
     private void PlayShakeAnimation()
     {
         LeanTween.cancel(gameObject);
-        var startPos = transform.localPosition;
+        ResetTransform();
 
         LeanTween.value(gameObject, 0f, 1f, ShakeDuration)
             .setOnUpdate((float t) =>
             {
                 float decay = 1f - t;
                 float offsetX = Mathf.Sin(t * Mathf.PI * 8f) * ShakeIntensity * decay;
-                transform.localPosition = startPos + new Vector3(offsetX, 0f, 0f);
+                transform.localPosition = _originalPosition + new Vector3(offsetX, 0f, 0f);
             })
             .setOnComplete(() =>
             {
-                transform.localPosition = startPos;
+                transform.localPosition = _originalPosition;
             })
             .setEase(LeanTweenType.linear);
     }
@@ -235,18 +251,18 @@ public class GridSquare : MonoBehaviour
     private void PlayRevealShakeAnimation()
     {
         LeanTween.cancel(gameObject);
-        var startPos = transform.localPosition;
+        ResetTransform();
 
         LeanTween.value(gameObject, 0f, 1f, 0.5f)
             .setOnUpdate((float t) =>
             {
                 float decay = 1f - t;
                 float offsetX = Mathf.Sin(t * Mathf.PI * 10f) * 0.12f * decay;
-                transform.localPosition = startPos + new Vector3(offsetX, 0f, 0f);
+                transform.localPosition = _originalPosition + new Vector3(offsetX, 0f, 0f);
             })
             .setOnComplete(() =>
             {
-                transform.localPosition = startPos;
+                transform.localPosition = _originalPosition;
             })
             .setEase(LeanTweenType.linear);
     }

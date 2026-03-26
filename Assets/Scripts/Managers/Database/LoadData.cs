@@ -62,11 +62,11 @@ public class LoadData : MonoBehaviour
 
     public GameDataLoad LoadGameData()
     {
-        string file = nameFile + ".json";
-        string filePath = Path.Combine(Application.dataPath,"Resources", file);
-        if (File.Exists(filePath))
+        // Use Resources.Load for cross-platform compatibility (Android can't use File.ReadAllText on APK)
+        TextAsset textAsset = Resources.Load<TextAsset>(nameFile);
+        if (textAsset != null)
         {
-            string dataAsJson = File.ReadAllText(filePath);
+            string dataAsJson = textAsset.text;
             GameDataLoad loadedData = JsonUtility.FromJson<GameDataLoad>(dataAsJson);
 
             // Populate the dictionary with words and their explanations
@@ -117,11 +117,11 @@ public class LoadData : MonoBehaviour
     public DictionaryDB LoadWordDictionary2()
     {
         Debug.Log("Loading word dictionary...");
-        string filePath = Path.Combine(Application.dataPath,"Resources", "WordDictionary.json");
-        if (File.Exists(filePath))
+        // Use Resources.Load for cross-platform compatibility (Android can't use File.ReadAllText on APK)
+        TextAsset textAsset = Resources.Load<TextAsset>("WordDictionary");
+        if (textAsset != null)
         {
-            string dataAsJson = File.ReadAllText(filePath);
-            DictionaryDB loadedData = JsonUtility.FromJson<DictionaryDB>(dataAsJson);
+            DictionaryDB loadedData = JsonUtility.FromJson<DictionaryDB>(textAsset.text);
             return loadedData;
         }
         else
@@ -135,7 +135,7 @@ public class LoadData : MonoBehaviour
     public void SaveGameData()
     {
         string dataAsJson = JsonUtility.ToJson(data);
-        string filePath = Path.Combine(Application.dataPath,"Resources", nameFile + "Save.json");
+        string filePath = Path.Combine(Application.persistentDataPath, nameFile + "Save.json");
         File.WriteAllText(filePath, dataAsJson);
     }
 
@@ -146,7 +146,7 @@ public class LoadData : MonoBehaviour
             Debug.LogError("Word dictionary is null!");
             return;
         }
-        string filePath = Path.Combine(Application.dataPath,"Resources", "WordDictionary.json");
+        string filePath = Path.Combine(Application.persistentDataPath, "WordDictionary.json");
         if (File.Exists(filePath))
         {
             Debug.Log("Word dictionary already exists. Skipping save.");
